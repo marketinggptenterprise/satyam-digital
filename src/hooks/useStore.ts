@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { StoreData, Product, Category, Brand, Banner, Order, OrderStatus } from '../types/store';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { showSuccess, showError } from '../utils/toast';
 
 const STORAGE_KEY = 'satyam_digital_store_data_v3';
 
@@ -81,45 +83,163 @@ export function useStore() {
     return saved ? JSON.parse(saved) : initialData;
   });
 
+  // Fetch data from Supabase on mount if configured
+  useEffect(() => {
+    if (!isSupabaseConfigured || !supabase) return;
+
+    const fetchAllData = async () => {
+      try {
+        const [
+          { data: productsData, error: pErr },
+          { data: categoriesData, error: cErr },
+          { data: brandsData, error: bErr },
+          { data: bannersData, error: banErr },
+          { data: ordersData, error: oErr }
+        ] = await Promise.all([
+          supabase.from('products').select('*'),
+          supabase.from('categories').select('*'),
+          supabase.from('brands').select('*'),
+          supabase.from('banners').select('*'),
+          supabase.from('orders').select('*')
+        ]);
+
+        // If tables don't exist yet, we'll gracefully fall back to local storage
+        if (pErr || cErr || bErr || banErr || oErr) {
+          console.warn("Supabase tables might not be created yet. Falling back to local storage.");
+          return;
+        }
+
+        setData({
+          products: productsData || [],
+          categories: categoriesData || [],
+          brands: brandsData || [],
+          banners: bannersData || [],
+          orders: ordersData || []
+        });
+      } catch (err) {
+        console.error("Error fetching from Supabase:", err);
+      }
+    };
+
+    fetchAllData();
+  }, []);
+
+  // Save to local storage as a secondary backup
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }, [data]);
 
-  const addProduct = (product: Omit<Product, 'id'>) => {
+  const addProduct = async (product: Omit<Product, 'id'>) => {
     const newProduct = { ...product, id: Date.now().toString() };
+    
+    // Optimistic update
     setData(prev => ({ ...prev, products: [...prev.products, newProduct] }));
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { error } = await supabase.from('products').insert([newProduct]);
+        if (error) throw error;
+      } catch (err) {
+        console.error("Supabase insert error:", err);
+        showError("Failed to sync product to cloud database.");
+      }
+    }
   };
 
-  const deleteProduct = (id: string) => {
+  const deleteProduct = async (id: string) => {
+    // Optimistic update
     setData(prev => ({ ...prev, products: prev.products.filter(p => p.id !== id) }));
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { error } = await supabase.from('products').delete().eq('id', id);
+        if (error) throw error;
+      } catch (err) {
+        console.error("Supabase delete error:", err);
+        showError("Failed to delete product from cloud database.");
+      }
+    }
   };
 
-  const addCategory = (name: string) => {
+  const addCategory = async (name: string) => {
     const newCategory = { id: name.toLowerCase().replace(/\s+/g, '-'), name };
+    
+    // Optimistic update
     setData(prev => ({ ...prev, categories: [...prev.categories, newCategory] }));
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { error } = await supabase.from('categories').insert([newCategory]);
+        if (error) throw error;
+      } catch (err) {
+        console.error("Supabase category insert error:", err);
+      }
+    }
   };
 
-  const addBrand = (name: string) => {
+  const addBrand = async (name: string) => {
     const newBrand = { id: name.toLowerCase().replace(/\s+/g, '-'), name };
+    
+    // Optimistic update
     setData(prev => ({ ...prev, brands: [...prev.brands, newBrand] }));
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { error } = await supabase.from('brands').insert([newBrand]);
+        if (error) throw error;
+      } catch (err) {
+        console.error("Supabase brand insert error:", err);
+      }
+    }
   };
 
-  const addBanner = (banner: Omit<Banner, 'id'>) => {
+  const addBanner = async (banner: Omit<Banner, 'id'>) => {
     const newBanner = { ...banner, id: Date.now().toString() };
+    
+    // Optimistic update
     setData(prev => ({ ...prev, banners: [...prev.banners, newBanner] }));
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { error } = await supabase.from('banners').insert([newBanner]);
+        if (error) throw error;
+      } catch (err) {
+        console.error("Supabase banner insert error:", err);
+      }
+    }
   };
 
-  const deleteBanner = (id: string) => {
+  const deleteBanner = async (id: string) => {
+    // Optimistic update
     setData(prev => ({ ...prev, banners: prev.banners.filter(b => b.id !== id) }));
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { error } = await supabase.from('banners').delete().eq('id', id);
+        if (error) throw error;
+      } catch (err) {
+        console.error("Supabase banner delete error:", err);
+      }
+    }
   };
 
-  const updateOrderStatus = (orderId: string, status: OrderStatus) => {
+  const updateOrderStatus = async (orderId: string, status: OrderStatus) => {
+    // Optimistic update
     setData(prev => ({
       ...prev,
       orders: prev.orders.map(order => 
         order.id === orderId ? { ...order, status } : order
       )
     }));
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { error } = await supabase.from('orders').update({ status }).eq('id', orderId);
+        if (error) throw error;
+      } catch (err) {
+        console.error("Supabase order update error:", err);
+      }
+    }
   };
 
   return {
