@@ -6,8 +6,8 @@ import { Navbar } from '../components/Navbar';
 import { ProductCard } from '../components/ProductCard';
 import { HeroSlider } from '../components/HeroSlider';
 import { Badge } from '../components/ui/badge';
-import { Smartphone, Tv, Laptop, Watch, Speaker, Refrigerator, X } from 'lucide-react';
 import { Button } from '../components/ui/button';
+import { Smartphone, Tv, Laptop, Watch, Speaker, Refrigerator, X, Search } from 'lucide-react';
 
 const Index = () => {
   const { products, categories, brands, banners } = useStore();
