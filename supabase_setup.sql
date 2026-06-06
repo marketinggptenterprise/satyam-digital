@@ -39,21 +39,30 @@ CREATE TABLE banners (
 );
 
 -- Optional: Insert initial data (uncomment if you want to re-populate with starter data after clearing)
--- INSERT INTO categories (id, name) VALUES
--- ('mobiles', 'Mobiles'),
--- ('electronics', 'Electronics'),
--- ('appliances', 'Home Appliances');
+INSERT INTO categories (id, name) VALUES
+('mobiles', 'Mobiles'),
+('electronics', 'Electronics'),
+('appliances', 'Home Appliances'),
+('laptops', 'Laptops'),
+('watches', 'Watches'),
+('audio', 'Audio');
 
--- INSERT INTO brands (id, name) VALUES
--- ('apple', 'Apple'),
--- ('samsung', 'Samsung'),
--- ('lg', 'LG'),
--- ('sony', 'Sony');
+INSERT INTO brands (id, name) VALUES
+('apple', 'Apple'),
+('samsung', 'Samsung'),
+('lg', 'LG'),
+('sony', 'Sony');
 
--- INSERT INTO products (id, name, description, price, "categoryId", "brandId", image, images) VALUES
--- ('1', 'iPhone 15 Pro', 'The latest flagship from Apple with Titanium design.', 129900, 'mobiles', 'apple', 'https://images.unsplash.com/photo-1696446701796-da61225697cc?auto=format&fit=crop&q=80&w=800', ARRAY['https://images.unsplash.com/photo-1696446701796-da61225697cc?auto=format&fit=crop&q=80&w=800']),
--- ('2', 'Samsung Neo QLED 4K', 'Experience stunning 4K resolution with Quantum Mini LEDs.', 85000, 'electronics', 'samsung', 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&q=80&w=800', ARRAY['https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&q=80&w=800']);
+INSERT INTO products (id, name, description, price, "categoryId", "brandId", image, images) VALUES
+('1', 'iPhone 15 Pro', 'The latest flagship from Apple with Titanium design.', 129900, 'mobiles', 'apple', 'https://images.unsplash.com/photo-1696446701796-da61225697cc?auto=format&fit=crop&q=80&w=800', ARRAY['https://images.unsplash.com/photo-1696446701796-da61225697cc?auto=format&fit=crop&q=80&w=800']),
+('2', 'Samsung Neo QLED 4K', 'Experience stunning 4K resolution with Quantum Mini LEDs.', 85000, 'electronics', 'samsung', 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&q=80&w=800', ARRAY['https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&q=80&w=800']),
+('3', 'MacBook Air M3', 'Incredibly thin and fast laptop from Apple.', 119000, 'laptops', 'apple', 'https://images.unsplash.com/photo-1694709841893-9c8827725514?auto=format&fit=crop&q=80&w=800', ARRAY['https://images.unsplash.com/photo-1694709841893-9c8827725514?auto=format&fit=crop&q=80&w=800']),
+('4', 'Sony WH-1000XM5', 'Industry-leading noise canceling headphones.', 28000, 'audio', 'sony', 'https://images.unsplash.com/photo-1621370729790-2e3d3e6c3f0b?auto=format&fit=crop&q=80&w=800', ARRAY['https://images.unsplash.com/photo-1621370729790-2e3d3e6c3f0b?auto=format&fit=crop&q=80&w=800']),
+('5', 'LG Smart Refrigerator', 'Large capacity smart refrigerator with InstaView Door-in-Door.', 95000, 'appliances', 'lg', 'https://images.unsplash.com/photo-1563229977-3e1b7f0c1c4f?auto=format&fit=crop&q=80&w=800', ARRAY['https://images.unsplash.com/photo-1563229977-3e1b7f0c1c4f?auto=format&fit=crop&q=80&w=800']),
+('6', 'Apple Watch Series 9', 'Advanced health and fitness features in a sleek design.', 41900, 'watches', 'apple', 'https://images.unsplash.com/photo-1698299292864-d922a901e188?auto=format&fit=crop&q=80&w=800', ARRAY['https://images.unsplash.com/photo-1698299292864-d922a901e188?auto=format&fit=crop&q=80&w=800']);
 
--- INSERT INTO banners (id, title, subtitle, badge, image, link) VALUES
--- ('1', 'Upgrade Your Digital Life', 'Get up to 40% off on latest smartphones and home appliances.', 'FESTIVAL SALE IS LIVE', 'https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&q=80&w=800', '#'),
--- ('2', 'Smart TV Revolution', 'Cinematic experience at your home with Neo QLED technology.', 'NEW ARRIVAL', 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&q=80&w=800', '#');
+
+INSERT INTO banners (id, title, subtitle, badge, image, link) VALUES
+('1', 'Upgrade Your Digital Life', 'Get up to 40% off on latest smartphones and home appliances.', 'FESTIVAL SALE IS LIVE', 'https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&q=80&w=800', '#'),
+('2', 'Smart TV Revolution', 'Cinematic experience at your home with Neo QLED technology.', 'NEW ARRIVAL', 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&q=80&w=800', '#'),
+('3', 'Powerful Laptops', 'Unleash your productivity with the latest generation of laptops.', 'PERFORMANCE BOOST', 'https://images.unsplash.com/photo-1694709841893-9c8827725514?auto=format&fit=crop&q=80&w=800', '#');
