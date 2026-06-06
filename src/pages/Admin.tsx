@@ -13,9 +13,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../co
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Badge } from '../components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
-import { Plus, Trash2, Package, Tag, Briefcase, LogOut, Image as ImageIcon, ShoppingBag, ExternalLink } from 'lucide-react';
+import { Plus, Trash2, Package, Tag, Briefcase, LogOut, Image as ImageIcon, ShoppingBag, ExternalLink, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { showSuccess } from '../utils/toast';
 import { OrderStatus } from '../types/store';
+import { isSupabaseConfigured } from '../lib/supabase';
 
 const Admin = () => {
   const { products, categories, brands, banners, orders, addProduct, deleteProduct, addCategory, addBrand, addBanner, deleteBanner, updateOrderStatus } = useStore();
@@ -79,6 +80,40 @@ const Admin = () => {
     <div className="min-h-screen bg-muted/30">
       <Navbar />
       <main className="container py-8">
+        {/* Database Connection Status Banner */}
+        {!isSupabaseConfigured ? (
+          <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6 rounded-r-xl shadow-sm">
+            <div className="flex items-start">
+              <div className="flex-shrink-0">
+                <AlertTriangle className="h-5 w-5 text-amber-500 mt-0.5" />
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-bold text-amber-800">Local Storage Mode (No Cloud Sync)</h3>
+                <p className="text-xs text-amber-700 mt-1 leading-relaxed">
+                  Your products are currently being saved <strong>only on this computer's browser</strong>. 
+                  To make them visible on other devices (like your mobile phone), you must configure your Supabase environment variables 
+                  (<code className="bg-amber-100 px-1 py-0.5 rounded font-mono text-[11px]">VITE_SUPABASE_URL</code> and <code className="bg-amber-100 px-1 py-0.5 rounded font-mono text-[11px]">VITE_SUPABASE_ANON_KEY</code>) 
+                  in your Vercel project settings.
+                </p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 mb-6 rounded-r-xl shadow-sm">
+            <div className="flex items-start">
+              <div className="flex-shrink-0">
+                <CheckCircle2 className="h-5 w-5 text-emerald-500 mt-0.5" />
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-bold text-emerald-800">Cloud Sync Active</h3>
+                <p className="text-xs text-emerald-700 mt-1 leading-relaxed">
+                  Connected to Supabase! All products, categories, and orders are synced in real-time across all devices.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
