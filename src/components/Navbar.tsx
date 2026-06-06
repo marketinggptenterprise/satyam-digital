@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Settings, Search, MapPin, ShoppingCart, Menu, X, Smartphone, Tv, Laptop, Watch, Speaker, Refrigerator, Sun, Moon } from 'lucide-react';
 import { Button } from './ui/button';
@@ -13,19 +13,37 @@ import { useTheme } from 'next-themes';
 export const Navbar = () => {
   const { totalItems } = useCart();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const [logoError, setLogoError] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const { theme, setTheme } = useTheme();
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/?q=${encodeURIComponent(searchQuery.trim())}`);
+  // Sync search input with URL search params if they change externally
+  useEffect(() => {
+    setSearchQuery(searchParams.get('q') || '');
+  }, [searchParams]);
+
+  const handleSearchChange = (val: string) => {
+    setSearchQuery(val);
+    
+    // If we are not on the home page, navigate to home page with the query
+    if (window.location.pathname !== '/') {
+      navigate(`/?q=${encodeURIComponent(val.trim())}`);
     } else {
-      navigate('/');
+      const params = new URLSearchParams(window.location.search);
+      if (val.trim()) {
+        params.set('q', val);
+      } else {
+        params.delete('q');
+      }
+      setSearchParams(params);
     }
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSearchChange(searchQuery);
     setIsMobileSearchOpen(false);
   };
 
@@ -121,12 +139,12 @@ export const Navbar = () => {
         </div>
 
         {/* Desktop Search Bar */}
-        <form onSubmit={handleSearch} className="flex-1 max-w-2xl relative hidden md:block group">
+        <form onSubmit={handleSearchSubmit} className="flex-1 max-w-2xl relative hidden md:block group">
           <Input
             placeholder="Search for Mobiles, Accessories, TV & more..."
             className="w-full pl-4 pr-12 h-11 border-2 border-primary/20 focus-visible:border-primary rounded-full bg-gray-50/50 dark:bg-zinc-800 dark:border-zinc-700 dark:text-white transition-all duration-300 group-hover:border-primary/40"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
           />
           <Button type="submit" size="icon" className="absolute right-1 top-1 h-9 w-9 rounded-full bg-primary hover:bg-primary/90 hover:scale-105 active:scale-95 transition-all">
             <Search className="h-4 w-4 text-white dark:text-zinc-950" />
@@ -165,12 +183,12 @@ export const Navbar = () => {
       {/* Mobile Search Bar (Expandable) */}
       {isMobileSearchOpen && (
         <div className="border-t p-3 bg-gray-50 dark:bg-zinc-800 md:hidden animate-in slide-in-from-top duration-200">
-          <form onSubmit={handleSearch} className="relative">
+          <form onSubmit={handleSearchSubmit} className="relative">
             <Input
               placeholder="Search products..."
               className="w-full pl-4 pr-12 h-10 border-2 border-primary/20 focus-visible:border-primary rounded-full bg-white dark:bg-zinc-900 dark:border-zinc-700 dark:text-white"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               autoFocus
             />
             <Button type="submit" size="icon" className="absolute right-1 top-1 h-8 w-8 rounded-full bg-primary hover:bg-primary/90">

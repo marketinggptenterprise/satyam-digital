@@ -149,7 +149,7 @@ const Index = () => {
         </div>
       </section>
 
-      <footer className="bg-primary text-white py-12">
+      <footer className="bg-primary text-white dark:text-zinc-950 py-12 transition-colors duration-300">
         <div className="container grid md:grid-cols-4 gap-8">
           <div className="space-y-4">
             <div className="flex items-center">
@@ -161,44 +161,44 @@ const Index = () => {
                 />
               </div>
               <div className="ml-2 leading-tight">
-                <span className="text-lg font-black text-white block">SATYAM</span>
-                <span className="text-xs font-bold text-secondary tracking-widest">DIGITAL</span>
+                <span className="text-lg font-black text-white dark:text-zinc-950 block">SATYAM</span>
+                <span className="text-xs font-bold text-secondary dark:text-zinc-800 tracking-widest">DIGITAL</span>
               </div>
             </div>
-            <p className="text-sm text-white/60">
+            <p className="text-sm text-white/80 dark:text-zinc-950/90">
               Satyam Digital is your trusted partner for all things electronic. We bring you the best brands at the best prices.
             </p>
           </div>
           <div>
-            <h4 className="font-bold mb-4">Quick Links</h4>
-            <ul className="text-sm text-white/60 space-y-2">
+            <h4 className="font-bold mb-4 text-white dark:text-zinc-950">Quick Links</h4>
+            <ul className="text-sm text-white/70 dark:text-zinc-950/80 space-y-2">
               {['About Us', 'Contact Us', 'Store Locator', 'Careers'].map((link, idx) => (
-                <li key={idx} className="relative w-fit hover:text-secondary hover:translate-x-1 transition-all duration-200 cursor-pointer py-1 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-secondary after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100">
+                <li key={idx} className="relative w-fit hover:text-secondary dark:hover:text-zinc-800 hover:translate-x-1 transition-all duration-200 cursor-pointer py-1 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-secondary dark:after:bg-zinc-800 after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100">
                   {link}
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <h4 className="font-bold mb-4">Policies</h4>
-            <ul className="text-sm text-white/60 space-y-2">
+            <h4 className="font-bold mb-4 text-white dark:text-zinc-950">Policies</h4>
+            <ul className="text-sm text-white/70 dark:text-zinc-950/80 space-y-2">
               {['Privacy Policy', 'Terms & Conditions', 'Shipping Policy', 'Return Policy'].map((link, idx) => (
-                <li key={idx} className="relative w-fit hover:text-secondary hover:translate-x-1 transition-all duration-200 cursor-pointer py-1 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-secondary after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100">
+                <li key={idx} className="relative w-fit hover:text-secondary dark:hover:text-zinc-800 hover:translate-x-1 transition-all duration-200 cursor-pointer py-1 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-secondary dark:after:bg-zinc-800 after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100">
                   {link}
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <h4 className="font-bold mb-4">Newsletter</h4>
-            <p className="text-sm text-white/60 mb-4">Subscribe to get latest updates and offers.</p>
+            <h4 className="font-bold mb-4 text-white dark:text-zinc-950">Newsletter</h4>
+            <p className="text-sm text-white/70 dark:text-zinc-950/80 mb-4">Subscribe to get latest updates and offers.</p>
             <div className="flex gap-2">
-              <input className="bg-white/10 border-none rounded-lg px-4 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-secondary transition-all" placeholder="Email" />
-              <button className="bg-secondary text-primary font-bold px-4 py-2 rounded-lg text-sm hover:scale-105 transition-transform duration-200">Join</button>
+              <input className="bg-white/10 dark:bg-zinc-950/10 border-none rounded-lg px-4 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-secondary dark:focus:ring-zinc-800 text-white dark:text-zinc-950 placeholder:text-white/50 dark:placeholder:text-zinc-950/50" placeholder="Email" />
+              <button className="bg-secondary dark:bg-zinc-900 text-primary dark:text-yellow-400 font-bold px-4 py-2 rounded-lg text-sm hover:scale-105 transition-transform duration-200">Join</button>
             </div>
           </div>
         </div>
-        <div className="container border-t border-white/10 mt-12 pt-8 text-center text-sm text-white/40">
+        <div className="container border-t border-white/10 dark:border-zinc-950/20 mt-12 pt-8 text-center text-sm text-white/50 dark:text-zinc-950/60">
           <p>© 2024 Satyam Digital. All rights reserved.</p>
         </div>
       </footer>
