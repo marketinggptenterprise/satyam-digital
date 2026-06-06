@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from 'react';
 import { StoreData, Product, Category, Brand, Banner } from '../types/store';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
@@ -89,7 +91,7 @@ export function useStore() {
         }
 
         setData({
-          products: productsData || [],
+          products: productsData ? productsData.map(p => ({ ...p, images: p.images || [] })) : [],
           categories: categoriesData || [],
           brands: brandsData || [],
           banners: bannersData || []
