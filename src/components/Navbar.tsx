@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Settings, Home } from 'lucide-react';
+import { Settings, Home } from 'lucide-react';
 import { Button } from './ui/button';
 
 export const Navbar = () => {
@@ -7,8 +7,8 @@ export const Navbar = () => {
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center space-x-2">
-          <ShoppingBag className="h-6 w-6 text-primary" />
-          <span className="text-xl font-bold tracking-tight">Satyam Digital</span>
+          <img src="/logo.png" alt="Satyam Digital Logo" className="h-10 w-auto object-contain" />
+          <span className="text-xl font-bold tracking-tight hidden sm:inline-block">Satyam Digital</span>
         </Link>
         
         <div className="flex items-center gap-4">
