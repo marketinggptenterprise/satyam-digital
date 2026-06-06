@@ -11,9 +11,13 @@ export const CartDrawer = ({ children }: { children: React.ReactNode }) => {
 
   const handleWhatsAppCheckout = () => {
     const phoneNumber = "918918700120";
-    const message = `Hello Satyam Digital! I would like to place an order:\n\n${cart.map(item => 
-      `• ${item.name} (x${item.quantity}) - ₹${(item.price * item.quantity).toLocaleString('en-IN')}`
-    ).join('\n')}\n\n*Grand Total: ₹${subtotal.toLocaleString('en-IN')}*`;
+    
+    // Constructing a detailed message with image links
+    const productDetails = cart.map(item => 
+      `• *${item.name}*\n  Qty: ${item.quantity}\n  Price: ₹${(item.price * item.quantity).toLocaleString('en-IN')}\n  Image: ${item.image}`
+    ).join('\n\n');
+
+    const message = `Hello Satyam Digital! I would like to place an order:\n\n${productDetails}\n\n*Grand Total: ₹${subtotal.toLocaleString('en-IN')}*\n\nPlease confirm my order.`;
 
     const encodedMessage = encodeURIComponent(message);
     window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
