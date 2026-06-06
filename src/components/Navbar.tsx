@@ -40,17 +40,17 @@ export const Navbar = () => {
   return (
     <header className="w-full bg-white dark:bg-zinc-900 shadow-sm sticky top-0 z-50 transition-colors duration-300">
       {/* Top Bar */}
-      <div className="bg-primary text-white py-2 text-xs">
+      <div className="bg-primary text-white dark:text-zinc-950 py-2 text-xs font-bold">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1 hover:text-secondary transition-colors cursor-pointer">
-              <MapPin className="h-3 w-3 text-secondary" /> Kargahir, kenduadihi, Bankura - 722101
+            <span className="flex items-center gap-1 hover:text-secondary dark:hover:text-zinc-800 transition-colors cursor-pointer">
+              <MapPin className="h-3 w-3 text-secondary dark:text-zinc-800" /> Kargahir, kenduadihi, Bankura - 722101
             </span>
-            <span className="hidden sm:inline hover:text-secondary transition-colors cursor-pointer">Contact: +91 9932026227</span>
+            <span className="hidden sm:inline hover:text-secondary dark:hover:text-zinc-800 transition-colors cursor-pointer">Contact: +91 9932026227</span>
           </div>
           <div className="flex items-center gap-4">
-            <Link to="/admin" className="hover:text-secondary flex items-center gap-1 font-semibold transition-colors">
-              <Settings className="h-3 w-3 text-secondary" /> Admin Panel
+            <Link to="/admin" className="hover:text-secondary dark:hover:text-zinc-800 flex items-center gap-1 font-semibold transition-colors">
+              <Settings className="h-3 w-3 text-secondary dark:text-zinc-800" /> Admin Panel
             </Link>
           </div>
         </div>
@@ -68,8 +68,8 @@ export const Navbar = () => {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-[300px] p-0 dark:bg-zinc-900">
-              <SheetHeader className="p-6 border-b bg-primary text-white">
-                <SheetTitle className="text-left text-white flex items-center gap-2">
+              <SheetHeader className="p-6 border-b bg-primary text-white dark:text-zinc-950">
+                <SheetTitle className="text-left text-white dark:text-zinc-950 flex items-center gap-2">
                   <span className="font-black tracking-wider">SATYAM DIGITAL</span>
                 </SheetTitle>
               </SheetHeader>
@@ -129,7 +129,7 @@ export const Navbar = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           <Button type="submit" size="icon" className="absolute right-1 top-1 h-9 w-9 rounded-full bg-primary hover:bg-primary/90 hover:scale-105 active:scale-95 transition-all">
-            <Search className="h-4 w-4 text-white" />
+            <Search className="h-4 w-4 text-white dark:text-zinc-950" />
           </Button>
         </form>
 
@@ -143,7 +143,7 @@ export const Navbar = () => {
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           >
             <Sun className="h-5 w-5 text-yellow-500 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-5 w-5 text-yellow-400 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <Moon className="absolute h-5 w-5 text-white rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           </Button>
 
           {/* Mobile Search Toggle */}
@@ -174,7 +174,7 @@ export const Navbar = () => {
               autoFocus
             />
             <Button type="submit" size="icon" className="absolute right-1 top-1 h-8 w-8 rounded-full bg-primary hover:bg-primary/90">
-              <Search className="h-3.5 w-3.5 text-white" />
+              <Search className="h-3.5 w-3.5 text-white dark:text-zinc-950" />
             </Button>
           </form>
         </div>

@@ -38,8 +38,28 @@
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-    --primary: 217 91% 37%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    
+    --card: 222.2 84% 7%;
+    --card-foreground: 210 40% 98%;
+    
+    --popover: 222.2 84% 7%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 45 100% 50%; /* Shift to Vibrant Yellow/Gold in Dark Mode */
+    --primary-foreground: 222.2 47.4% 11.2%; /* Dark text for high contrast on yellow */
+
+    --secondary: 217 91% 37%; /* Swap secondary to Blue in Dark Mode */
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 222.2 84% 12%;
+    --muted-foreground: 215.4 16.3% 70%;
+
+    --accent: 222.2 84% 15%;
+    --accent-foreground: 210 40% 98%;
+
+    --border: 222.2 84% 15%;
+    --input: 222.2 84% 15%;
+    --ring: 45 100% 50%;
   }
 }
 
@@ -48,6 +68,6 @@
     @apply border-border;
   }
   body {
-    @apply bg-[#f4f4f4] text-foreground;
+    @apply bg-[#f4f4f4] text-foreground dark:bg-zinc-950;
   }
 }
