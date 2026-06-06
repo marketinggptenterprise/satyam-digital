@@ -16,6 +16,7 @@ export interface Product {
   categoryId: string;
   brandId: string;
   image: string;
+  images?: string[]; // Support up to 5 images
 }
 
 export interface Banner {
@@ -27,22 +28,9 @@ export interface Banner {
   link: string;
 }
 
-export type OrderStatus = 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
-
-export interface Order {
-  id: string;
-  customerEmail: string;
-  customerName: string;
-  date: string;
-  total: number;
-  status: OrderStatus;
-  items: string;
-}
-
 export interface StoreData {
   products: Product[];
   categories: Category[];
   brands: Brand[];
   banners: Banner[];
-  orders: Order[];
 }

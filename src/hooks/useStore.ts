@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { StoreData, Product, Category, Brand, Banner, Order, OrderStatus } from '../types/store';
+import { StoreData, Product, Category, Brand, Banner } from '../types/store';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
-import { showSuccess, showError } from '../utils/toast';
+import { showError } from '../utils/toast';
 
-const STORAGE_KEY = 'satyam_digital_store_data_v3';
+const STORAGE_KEY = 'satyam_digital_store_data_v4';
 
 const initialData: StoreData = {
   products: [
@@ -14,7 +14,8 @@ const initialData: StoreData = {
       price: 129900,
       categoryId: 'mobiles',
       brandId: 'apple',
-      image: 'https://images.unsplash.com/photo-1696446701796-da61225697cc?auto=format&fit=crop&q=80&w=800'
+      image: 'https://images.unsplash.com/photo-1696446701796-da61225697cc?auto=format&fit=crop&q=80&w=800',
+      images: ['https://images.unsplash.com/photo-1696446701796-da61225697cc?auto=format&fit=crop&q=80&w=800']
     },
     {
       id: '2',
@@ -23,7 +24,8 @@ const initialData: StoreData = {
       price: 85000,
       categoryId: 'electronics',
       brandId: 'samsung',
-      image: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&q=80&w=800'
+      image: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&q=80&w=800',
+      images: ['https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&q=80&w=800']
     }
   ],
   categories: [
@@ -54,26 +56,6 @@ const initialData: StoreData = {
       image: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&q=80&w=800',
       link: '#'
     }
-  ],
-  orders: [
-    { 
-      id: 'ORD-7281', 
-      customerEmail: 'admin@example.com', 
-      customerName: 'John Doe', 
-      date: '2024-03-15', 
-      total: 129900, 
-      status: 'Delivered', 
-      items: 'iPhone 15 Pro' 
-    },
-    { 
-      id: 'ORD-6542', 
-      customerEmail: 'user@example.com', 
-      customerName: 'Jane Smith', 
-      date: '2024-02-28', 
-      total: 2450, 
-      status: 'Processing', 
-      items: 'Samsung Case, Cable' 
-    }
   ]
 };
 
@@ -93,18 +75,15 @@ export function useStore() {
           { data: productsData, error: pErr },
           { data: categoriesData, error: cErr },
           { data: brandsData, error: bErr },
-          { data: bannersData, error: banErr },
-          { data: ordersData, error: oErr }
+          { data: bannersData, error: banErr }
         ] = await Promise.all([
           supabase.from('products').select('*'),
           supabase.from('categories').select('*'),
           supabase.from('brands').select('*'),
-          supabase.from('banners').select('*'),
-          supabase.from('orders').select('*')
+          supabase.from('banners').select('*')
         ]);
 
-        // If tables don't exist yet, we'll gracefully fall back to local storage
-        if (pErr || cErr || bErr || banErr || oErr) {
+        if (pErr || cErr || bErr || banErr) {
           console.warn("Supabase tables might not be created yet. Falling back to local storage.");
           return;
         }
@@ -113,8 +92,7 @@ export function useStore() {
           products: productsData || [],
           categories: categoriesData || [],
           brands: brandsData || [],
-          banners: bannersData || [],
-          orders: ordersData || []
+          banners: bannersData || []
         });
       } catch (err) {
         console.error("Error fetching from Supabase:", err);
@@ -142,6 +120,24 @@ export function useStore() {
       } catch (err) {
         console.error("Supabase insert error:", err);
         showError("Failed to sync product to cloud database.");
+      }
+    }
+  };
+
+  const updateProduct = async (updatedProduct: Product) => {
+    // Optimistic update
+    setData(prev => ({
+      ...prev,
+      products: prev.products.map(p => p.id === updatedProduct.id ? updatedProduct : p)
+    }));
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { error } = await supabase.from('products').update(updatedProduct).eq('id', updatedProduct.id);
+        if (error) throw error;
+      } catch (err) {
+        console.error("Supabase update error:", err);
+        showError("Failed to update product in cloud database.");
       }
     }
   };
@@ -177,6 +173,21 @@ export function useStore() {
     }
   };
 
+  const deleteCategory = async (id: string) => {
+    // Optimistic update
+    setData(prev => ({ ...prev, categories: prev.categories.filter(c => c.id !== id) }));
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { error } = await supabase.from('categories').delete().eq('id', id);
+        if (error) throw error;
+      } catch (err) {
+        console.error("Supabase category delete error:", err);
+        showError("Failed to delete category from cloud database.");
+      }
+    }
+  };
+
   const addBrand = async (name: string) => {
     const newBrand = { id: name.toLowerCase().replace(/\s+/g, '-'), name };
     
@@ -189,6 +200,21 @@ export function useStore() {
         if (error) throw error;
       } catch (err) {
         console.error("Supabase brand insert error:", err);
+      }
+    }
+  };
+
+  const deleteBrand = async (id: string) => {
+    // Optimistic update
+    setData(prev => ({ ...prev, brands: prev.brands.filter(b => b.id !== id) }));
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { error } = await supabase.from('brands').delete().eq('id', id);
+        if (error) throw error;
+      } catch (err) {
+        console.error("Supabase brand delete error:", err);
+        showError("Failed to delete brand from cloud database.");
       }
     }
   };
@@ -209,6 +235,24 @@ export function useStore() {
     }
   };
 
+  const updateBanner = async (updatedBanner: Banner) => {
+    // Optimistic update
+    setData(prev => ({
+      ...prev,
+      banners: prev.banners.map(b => b.id === updatedBanner.id ? updatedBanner : b)
+    }));
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { error } = await supabase.from('banners').update(updatedBanner).eq('id', updatedBanner.id);
+        if (error) throw error;
+      } catch (err) {
+        console.error("Supabase banner update error:", err);
+        showError("Failed to update banner in cloud database.");
+      }
+    }
+  };
+
   const deleteBanner = async (id: string) => {
     // Optimistic update
     setData(prev => ({ ...prev, banners: prev.banners.filter(b => b.id !== id) }));
@@ -223,33 +267,17 @@ export function useStore() {
     }
   };
 
-  const updateOrderStatus = async (orderId: string, status: OrderStatus) => {
-    // Optimistic update
-    setData(prev => ({
-      ...prev,
-      orders: prev.orders.map(order => 
-        order.id === orderId ? { ...order, status } : order
-      )
-    }));
-
-    if (isSupabaseConfigured && supabase) {
-      try {
-        const { error } = await supabase.from('orders').update({ status }).eq('id', orderId);
-        if (error) throw error;
-      } catch (err) {
-        console.error("Supabase order update error:", err);
-      }
-    }
-  };
-
   return {
     ...data,
     addProduct,
+    updateProduct,
     deleteProduct,
     addCategory,
+    deleteCategory,
     addBrand,
+    deleteBrand,
     addBanner,
-    deleteBanner,
-    updateOrderStatus
+    updateBanner,
+    deleteBanner
   };
 }

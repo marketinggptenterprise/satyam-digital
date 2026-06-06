@@ -14,10 +14,12 @@ export const CartDrawer = () => {
 
     const productDetails = cart
       .map(
-        (item) =>
-          `• *${item.name}*\n  Qty: ${item.quantity}\n  Price: ₹${(
+        (item) => {
+          const itemImage = item.images && item.images.length > 0 ? item.images[0] : item.image;
+          return `• *${item.name}*\n  Qty: ${item.quantity}\n  Price: ₹${(
             item.price * item.quantity
-          ).toLocaleString("en-IN")}\n  Image: ${item.image}`,
+          ).toLocaleString("en-IN")}\n  Image: ${itemImage}`;
+        }
       )
       .join("\n\n");
 
@@ -62,48 +64,51 @@ export const CartDrawer = () => {
               <p className="text-muted-foreground">Your cart is empty</p>
             </div>
           ) : (
-            cart.map((item) => (
-              <div key={item.id} className="flex gap-4">
-                <div className="h-20 w-20 rounded-lg bg-muted overflow-hidden shrink-0">
-                  <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
-                </div>
-                <div className="flex-1 space-y-1">
-                  <h4 className="text-sm font-bold line-clamp-1">{item.name}</h4>
-                  <p className="text-xs text-muted-foreground">
-                    ₹{item.price.toLocaleString("en-IN")}
-                  </p>
-                  <div className="flex items-center justify-between pt-2">
-                    <div className="flex items-center border rounded-lg">
+            cart.map((item) => {
+              const itemImage = item.images && item.images.length > 0 ? item.images[0] : item.image;
+              return (
+                <div key={item.id} className="flex gap-4">
+                  <div className="h-20 w-20 rounded-lg bg-muted overflow-hidden shrink-0">
+                    <img src={itemImage} alt={item.name} className="h-full w-full object-cover" />
+                  </div>
+                  <div className="flex-1 space-y-1">
+                    <h4 className="text-sm font-bold line-clamp-1">{item.name}</h4>
+                    <p className="text-xs text-muted-foreground">
+                      ₹{item.price.toLocaleString("en-IN")}
+                    </p>
+                    <div className="flex items-center justify-between pt-2">
+                      <div className="flex items-center border rounded-lg">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => updateQuantity(item.id, -1)}
+                        >
+                          <Minus className="h-3 w-3" />
+                        </Button>
+                        <span className="w-8 text-center text-sm font-bold">{item.quantity}</span>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => updateQuantity(item.id, 1)}
+                        >
+                          <Plus className="h-3 w-3" />
+                        </Button>
+                      </div>
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8"
-                        onClick={() => updateQuantity(item.id, -1)}
+                        className="h-8 w-8 text-destructive"
+                        onClick={() => removeFromCart(item.id)}
                       >
-                        <Minus className="h-3 w-3" />
-                      </Button>
-                      <span className="w-8 text-center text-sm font-bold">{item.quantity}</span>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8"
-                        onClick={() => updateQuantity(item.id, 1)}
-                      >
-                        <Plus className="h-3 w-3" />
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 text-destructive"
-                      onClick={() => removeFromCart(item.id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
                   </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
 
