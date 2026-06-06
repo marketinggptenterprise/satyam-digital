@@ -37,8 +37,8 @@ export const HeroSlider = ({ banners }: HeroSliderProps) => {
                   <p className="text-white/80 dark:text-black font-medium text-sm md:text-lg mb-8 line-clamp-2">
                     {banner.subtitle}
                   </p>
-                  <Button className="bg-secondary text-primary dark:bg-zinc-900 dark:text-yellow-400 hover:bg-secondary/90 hover:text-primary font-black px-8 py-6 rounded-full hover:scale-105 transition-all text-lg shadow-lg">
-                    SHOP NOW
+                  <Button asChild className="bg-secondary text-primary dark:bg-zinc-900 dark:text-yellow-400 hover:bg-secondary/90 hover:text-primary font-black px-8 py-6 rounded-full hover:scale-105 transition-all text-lg shadow-lg">
+                    <a href="tel:+919932026227">SHOP NOW</a>
                   </Button>
                 </div>
                 <div className="absolute right-0 bottom-0 w-full md:w-1/2 h-full opacity-30 md:opacity-100">

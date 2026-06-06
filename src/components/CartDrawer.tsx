@@ -10,7 +10,7 @@ export const CartDrawer = () => {
   const { cart, updateQuantity, removeFromCart, subtotal, totalItems } = useCart();
 
   const handleWhatsAppCheckout = () => {
-    const phoneNumber = "918918700120";
+    const phoneNumber = "919932026227"; // Updated WhatsApp number
 
     const productDetails = cart
       .map(
