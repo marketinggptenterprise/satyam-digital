@@ -1,12 +1,23 @@
 import { Link } from 'react-router-dom';
-import { Settings, Search, MapPin, User, ShoppingCart, Menu } from 'lucide-react';
+import { Settings, Search, MapPin, User as UserIcon, ShoppingCart, Menu, LogOut } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { CartDrawer } from './CartDrawer';
 import { useCart } from '../hooks/useCart';
+import { useAuth } from '../context/AuthContext';
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuLabel, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
+} from './ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 export const Navbar = () => {
   const { totalItems } = useCart();
+  const { user, signInWithGoogle, signOut } = useAuth();
 
   return (
     <header className="w-full bg-white shadow-sm sticky top-0 z-50">
@@ -50,10 +61,45 @@ export const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-6 shrink-0">
-          <div className="flex flex-col items-center cursor-pointer group">
-            <User className="h-6 w-6 text-gray-600 group-hover:text-primary" />
-            <span className="text-[10px] font-medium text-gray-500 group-hover:text-primary">Login</span>
-          </div>
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <div className="flex flex-col items-center cursor-pointer group">
+                  <Avatar className="h-8 w-8 border-2 border-primary/20">
+                    <AvatarImage src={user.user_metadata.avatar_url} />
+                    <AvatarFallback className="bg-primary/10 text-primary font-bold">
+                      {user.email?.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="text-[10px] font-medium text-gray-500 group-hover:text-primary mt-1">Profile</span>
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>
+                  <div className="flex flex-col">
+                    <span className="font-bold">{user.user_metadata.full_name || 'User'}</span>
+                    <span className="text-xs text-muted-foreground truncate">{user.email}</span>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="cursor-pointer">My Orders</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">Wishlist</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive" onClick={signOut}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Logout</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <div 
+              className="flex flex-col items-center cursor-pointer group"
+              onClick={signInWithGoogle}
+            >
+              <UserIcon className="h-6 w-6 text-gray-600 group-hover:text-primary" />
+              <span className="text-[10px] font-medium text-gray-500 group-hover:text-primary">Login</span>
+            </div>
+          )}
           
           <CartDrawer>
             <div className="flex flex-col items-center cursor-pointer group relative">
