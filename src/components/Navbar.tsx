@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Settings, Search, MapPin, User as UserIcon, ShoppingCart, Menu, LogOut, UserCircle } from 'lucide-react';
+import { Settings, Search, MapPin, User as UserIcon, ShoppingCart, Menu, LogOut, UserCircle, Package } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { CartDrawer } from './CartDrawer';
