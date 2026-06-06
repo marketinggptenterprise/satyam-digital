@@ -6,8 +6,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { useAuth } from "../context/AuthContext";
-import { LogIn, UserPlus, Info } from "lucide-react";
-import { Alert, AlertDescription } from "./ui/alert";
+import { LogIn, UserPlus } from "lucide-react";
 
 export const LoginDialog = ({ children }: { children: React.ReactNode }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -40,20 +39,11 @@ export const LoginDialog = ({ children }: { children: React.ReactNode }) => {
           <DialogDescription className="text-center">
             {isLogin 
               ? 'Enter your credentials to access your account' 
-              : 'Join Satyam Digital to track your orders and more'}
+              : 'Join Satyam Digital to start shopping'}
           </DialogDescription>
         </DialogHeader>
         
         <div className="space-y-6 py-4">
-          {!isLogin && (
-            <Alert className="bg-primary/5 border-primary/20">
-              <Info className="h-4 w-4 text-primary" />
-              <AlertDescription className="text-xs text-primary/80">
-                After signing up, please check your email to verify your account before logging in.
-              </AlertDescription>
-            </Alert>
-          )}
-
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email Address</Label>
