@@ -184,7 +184,7 @@ export const Navbar = () => {
           <form onSubmit={handleSearchSubmit} className="relative group">
             <Input
               placeholder="Search for Mobiles, Accessories, TV & more..."
-              className="w-full pl-4 pr-12 h-11 border border-white/20 dark:border-zinc-800/50 rounded-full bg-white/40 dark:bg-zinc-800/40 backdrop-blur-md dark:text-white transition-all duration-300 focus:bg-white/60 dark:focus:bg-zinc-800/60 focus:border-primary/50"
+              className="w-full pl-4 pr-12 h-11 border border-slate-200 dark:border-zinc-700 rounded-full bg-white/40 dark:bg-zinc-800/40 backdrop-blur-md dark:text-white transition-all duration-300 focus:bg-white/60 dark:focus:bg-zinc-800/60 focus:border-primary/50 shadow-sm"
               value={searchQuery}
               onChange={(e) => handleSearchChange(e.target.value)}
               onFocus={() => setShowSuggestions(searchQuery.trim().length > 0)}
@@ -267,7 +267,7 @@ export const Navbar = () => {
           <form onSubmit={handleSearchSubmit} className="relative">
             <Input
               placeholder="Search products..."
-              className="w-full pl-4 pr-12 h-10 border border-white/20 dark:border-zinc-700/30 rounded-full bg-white/40 dark:bg-zinc-900/40 backdrop-blur-md dark:text-white"
+              className="w-full pl-4 pr-12 h-10 border border-slate-200 dark:border-zinc-700 rounded-full bg-white/40 dark:bg-zinc-900/40 backdrop-blur-md dark:text-white shadow-sm"
               value={searchQuery}
               onChange={(e) => handleSearchChange(e.target.value)}
               onFocus={() => setShowSuggestions(searchQuery.trim().length > 0)}
