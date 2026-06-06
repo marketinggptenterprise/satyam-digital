@@ -110,54 +110,36 @@ const Index = () => {
             )}
           </div>
           
-          {/* Custom Styled Badges matching the image */}
-          <div className="flex flex-wrap gap-2.5 items-center">
-            {/* All Badge */}
+          <div className="flex flex-wrap gap-2">
             <Badge 
-              className={`cursor-pointer px-5 py-1.5 text-xs font-bold rounded-full transition-all duration-200 hover:scale-105 border-none ${
-                !selectedCategory && !isOffersSection 
-                  ? "bg-secondary text-primary shadow-md" 
-                  : "bg-zinc-950 text-white border border-blue-900/80 hover:bg-zinc-900"
-              }`}
+              variant={!selectedCategory && !isOffersSection ? "default" : "outline"}
+              className="cursor-pointer px-4 py-1 hover:scale-105 transition-transform duration-200 rounded-full"
               onClick={clearFilters}
             >
               All
             </Badge>
-
-            {/* Offers Badge */}
             <Badge 
-              className={`cursor-pointer px-5 py-1.5 text-xs font-bold rounded-full transition-all duration-200 hover:scale-105 ${
-                isOffersSection 
-                  ? "bg-red-600 text-white border-none shadow-md" 
-                  : "bg-red-950/30 text-red-500 border border-red-900/50 hover:bg-red-950/50"
-              }`}
+              variant={isOffersSection ? "default" : "outline"}
+              className="cursor-pointer px-4 py-1 hover:scale-105 transition-transform duration-200 rounded-full bg-red-500/10 text-red-600 border-red-500/20 hover:bg-red-500/20"
               onClick={() => setSearchParams({ q: 'offer' })}
             >
-              <span className="mr-1">%</span> Offers
+              <Percent className="h-3 w-3 mr-1" /> Offers
             </Badge>
-
-            {/* Category Badges */}
-            {categories.map(cat => {
-              const isActive = selectedCategory === cat.id;
-              return (
-                <Badge 
-                  key={cat.id}
-                  className={`cursor-pointer px-5 py-1.5 text-xs font-bold rounded-full transition-all duration-200 hover:scale-105 ${
-                    isActive 
-                      ? "bg-primary text-white border-none shadow-md" 
-                      : "bg-zinc-950 text-white border border-blue-900/80 hover:bg-zinc-900"
-                  }`}
-                  onClick={() => {
-                    const params = new URLSearchParams(searchParams);
-                    params.set('cat', cat.id);
-                    params.delete('q'); // Clear search query when switching categories
-                    setSearchParams(params);
-                  }}
-                >
-                  {cat.name}
-                </Badge>
-              );
-            })}
+            {categories.map(cat => (
+              <Badge 
+                key={cat.id}
+                variant={selectedCategory === cat.id ? "default" : "outline"}
+                className="cursor-pointer px-4 py-1 hover:scale-105 transition-transform duration-200 rounded-full"
+                onClick={() => {
+                  const params = new URLSearchParams(searchParams);
+                  params.set('cat', cat.id);
+                  params.delete('q'); // Clear search query when switching categories
+                  setSearchParams(params);
+                }}
+              >
+                {cat.name}
+              </Badge>
+            ))}
           </div>
         </div>
 
