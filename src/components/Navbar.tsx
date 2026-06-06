@@ -3,6 +3,7 @@ import { Settings, Search, MapPin, User as UserIcon, ShoppingCart, Menu, LogOut 
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { CartDrawer } from './CartDrawer';
+import { LoginDialog } from './LoginDialog';
 import { useCart } from '../hooks/useCart';
 import { useAuth } from '../context/AuthContext';
 import { 
@@ -17,7 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 export const Navbar = () => {
   const { totalItems } = useCart();
-  const { user, signInWithGoogle, signOut } = useAuth();
+  const { user, signOut } = useAuth();
 
   return (
     <header className="w-full bg-white shadow-sm sticky top-0 z-50">
@@ -77,7 +78,7 @@ export const Navbar = () => {
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>
                   <div className="flex flex-col">
-                    <span className="font-bold">{user.user_metadata.full_name || 'User'}</span>
+                    <span className="font-bold">{user.user_metadata.full_name || user.email?.split('@')[0]}</span>
                     <span className="text-xs text-muted-foreground truncate">{user.email}</span>
                   </div>
                 </DropdownMenuLabel>
@@ -92,13 +93,12 @@ export const Navbar = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <div 
-              className="flex flex-col items-center cursor-pointer group"
-              onClick={signInWithGoogle}
-            >
-              <UserIcon className="h-6 w-6 text-gray-600 group-hover:text-primary" />
-              <span className="text-[10px] font-medium text-gray-500 group-hover:text-primary">Login</span>
-            </div>
+            <LoginDialog>
+              <div className="flex flex-col items-center cursor-pointer group">
+                <UserIcon className="h-6 w-6 text-gray-600 group-hover:text-primary" />
+                <span className="text-[10px] font-medium text-gray-500 group-hover:text-primary">Login</span>
+              </div>
+            </LoginDialog>
           )}
           
           <CartDrawer>
