@@ -22,22 +22,20 @@ export const HeroSlider = ({ banners }: HeroSliderProps) => {
 
   return (
     <section className="container py-6 relative group">
-      <div className="overflow-hidden rounded-2xl" ref={emblaRef}>
+      <div className="overflow-hidden rounded-2xl shadow-lg border" ref={emblaRef}>
         <div className="flex">
           {banners.map((banner) => (
             <div key={banner.id} className="flex-[0_0_100%] min-w-0 relative">
               <div className="relative bg-gradient-to-r from-primary to-blue-900 h-[300px] md:h-[400px] flex items-center overflow-hidden">
                 <div className="px-8 md:px-16 max-w-xl relative z-10">
-                  <Badge className="bg-secondary text-primary font-bold mb-4 hover:bg-secondary hover:text-primary">{banner.badge}</Badge>
+                  <Badge className="bg-secondary text-primary font-bold mb-4 rounded-full px-3 py-1">{banner.badge}</Badge>
                   <h1 className="text-3xl md:text-6xl font-black text-white mb-4 leading-tight">
-                    {banner.title.split(' ').map((word, i) => (
-                      <span key={i} className={i === 2 ? "text-secondary" : ""}>{word} </span>
-                    ))}
+                    {banner.title}
                   </h1>
                   <p className="text-white/80 text-sm md:text-lg mb-8 line-clamp-2">
                     {banner.subtitle}
                   </p>
-                  <Button className="bg-secondary text-primary hover:bg-secondary/90 hover:text-primary font-black px-8 py-6 rounded-full hover:scale-105 transition-all text-lg">
+                  <Button className="bg-secondary text-primary hover:bg-secondary/90 font-black px-8 py-6 rounded-full text-lg shadow-lg">
                     SHOP NOW
                   </Button>
                 </div>

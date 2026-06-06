@@ -71,20 +71,3 @@
     @apply bg-slate-50 text-foreground dark:bg-zinc-950 min-h-screen relative overflow-x-hidden;
   }
 }
-
-/* Liquid Glass Glassmorphism Utilities */
-.glass-panel {
-  @apply bg-white/40 dark:bg-zinc-900/40 backdrop-blur-xl border border-white/20 dark:border-zinc-800/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.2)];
-}
-
-.glass-panel-hover {
-  @apply transition-all duration-300 hover:bg-white/60 dark:hover:bg-zinc-900/60 hover:border-white/40 dark:hover:border-zinc-800/50 hover:shadow-[0_8px_32px_0_rgba(0,0,0,0.08)] dark:hover:shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] hover:-translate-y-1;
-}
-
-.glass-input {
-  @apply bg-white/30 dark:bg-zinc-800/30 backdrop-blur-md border border-white/20 dark:border-zinc-700/30 focus:bg-white/50 dark:focus:bg-zinc-800/50 transition-all duration-300;
-}
-
-.glass-card {
-  @apply bg-white/30 dark:bg-zinc-900/30 backdrop-blur-lg border border-white/10 dark:border-zinc-800/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.037)];
-}
