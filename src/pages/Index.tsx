@@ -114,9 +114,9 @@ const Index = () => {
         <div className="container grid md:grid-cols-4 gap-8">
           <div className="space-y-4">
             <div className="flex items-center">
-              <div className="bg-white p-1 rounded-lg">
+              <div className="bg-white p-2 rounded-lg">
                 <img 
-                  src="dyad-media://media/gentle-tardigrade-nap/.dyad/media/67dd33d278279b0977d699cba0652aefff5596e1380b25706ea58bb5084d86dd.png" 
+                  src="/logo.png" 
                   alt="Satyam Digital" 
                   className="h-12 w-auto object-contain" 
                 />

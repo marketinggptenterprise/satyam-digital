@@ -29,9 +29,9 @@ export const Navbar = () => {
       <div className="container py-4 flex items-center gap-8">
         <Link to="/" className="flex items-center shrink-0">
           <img 
-            src="dyad-media://media/gentle-tardigrade-nap/.dyad/media/67dd33d278279b0977d699cba0652aefff5596e1380b25706ea58bb5084d86dd.png" 
+            src="/logo.png" 
             alt="Satyam Digital" 
-            className="h-14 w-auto object-contain" 
+            className="h-16 w-auto object-contain" 
           />
           <div className="ml-2 leading-tight hidden lg:block">
             <span className="text-xl font-black text-primary block">SATYAM</span>
