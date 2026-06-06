@@ -3,6 +3,8 @@ import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { ShoppingCart, Star } from 'lucide-react';
+import { useCart } from '../hooks/useCart';
+import { showSuccess } from '../utils/toast';
 
 interface ProductCardProps {
   product: Product;
@@ -11,7 +13,13 @@ interface ProductCardProps {
 }
 
 export const ProductCard = ({ product, category, brand }: ProductCardProps) => {
-  const discountPrice = product.price * 1.2; // Mock original price for UI
+  const { addToCart } = useCart();
+  const discountPrice = product.price * 1.2;
+
+  const handleAddToCart = () => {
+    addToCart(product);
+    showSuccess(`${product.name} added to cart!`);
+  };
 
   return (
     <Card className="group relative bg-white border-none shadow-sm hover:shadow-xl transition-all duration-300 rounded-xl overflow-hidden">
@@ -54,7 +62,10 @@ export const ProductCard = ({ product, category, brand }: ProductCardProps) => {
           </span>
         </div>
 
-        <Button className="w-full bg-primary hover:bg-primary/90 text-white font-bold rounded-lg gap-2">
+        <Button 
+          onClick={handleAddToCart}
+          className="w-full bg-primary hover:bg-primary/90 text-white font-bold rounded-lg gap-2"
+        >
           <ShoppingCart className="h-4 w-4" /> Add to Cart
         </Button>
       </CardContent>

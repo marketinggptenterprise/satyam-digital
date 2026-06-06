@@ -2,8 +2,12 @@ import { Link } from 'react-router-dom';
 import { Settings, Search, MapPin, User, ShoppingCart, Menu } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import { CartDrawer } from './CartDrawer';
+import { useCart } from '../hooks/useCart';
 
 export const Navbar = () => {
+  const { totalItems } = useCart();
+
   return (
     <header className="w-full bg-white shadow-sm sticky top-0 z-50">
       {/* Top Bar */}
@@ -46,11 +50,18 @@ export const Navbar = () => {
             <User className="h-6 w-6 text-gray-600 group-hover:text-primary" />
             <span className="text-[10px] font-medium text-gray-500 group-hover:text-primary">Login</span>
           </div>
-          <div className="flex flex-col items-center cursor-pointer group relative">
-            <ShoppingCart className="h-6 w-6 text-gray-600 group-hover:text-primary" />
-            <span className="text-[10px] font-medium text-gray-500 group-hover:text-primary">Cart</span>
-            <span className="absolute -top-1 -right-1 bg-secondary text-primary text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
-          </div>
+          
+          <CartDrawer>
+            <div className="flex flex-col items-center cursor-pointer group relative">
+              <ShoppingCart className="h-6 w-6 text-gray-600 group-hover:text-primary" />
+              <span className="text-[10px] font-medium text-gray-500 group-hover:text-primary">Cart</span>
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 bg-secondary text-primary text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center animate-in zoom-in">
+                  {totalItems}
+                </span>
+              )}
+            </div>
+          </CartDrawer>
         </div>
       </div>
 
