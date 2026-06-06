@@ -1,31 +1,75 @@
 import { Link } from 'react-router-dom';
-import { Settings, Home } from 'lucide-react';
+import { Settings, Search, MapPin, User, ShoppingCart, Menu } from 'lucide-react';
 import { Button } from './ui/button';
+import { Input } from './ui/input';
 
 export const Navbar = () => {
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center space-x-2">
-          <img src="/logo.png" alt="Satyam Digital Logo" className="h-10 w-auto object-contain" />
-          <span className="text-xl font-bold tracking-tight hidden sm:inline-block">Satyam Digital</span>
-        </Link>
-        
-        <div className="flex items-center gap-4">
-          <Link to="/">
-            <Button variant="ghost" size="sm" className="gap-2">
-              <Home className="h-4 w-4" />
-              Store
-            </Button>
-          </Link>
-          <Link to="/admin">
-            <Button variant="outline" size="sm" className="gap-2">
-              <Settings className="h-4 w-4" />
-              Admin Panel
-            </Button>
-          </Link>
+    <header className="w-full bg-white shadow-sm sticky top-0 z-50">
+      {/* Top Bar */}
+      <div className="bg-primary text-white py-2 text-xs">
+        <div className="container flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> Select Location</span>
+            <span>Contact: +91 12345 67890</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <Link to="/admin" className="hover:underline flex items-center gap-1">
+              <Settings className="h-3 w-3" /> Admin Panel
+            </Link>
+          </div>
         </div>
       </div>
-    </nav>
+
+      {/* Main Header */}
+      <div className="container py-4 flex items-center gap-8">
+        <Link to="/" className="flex items-center shrink-0">
+          <img src="/logo.png" alt="Satyam Digital" className="h-12 w-auto" />
+          <div className="ml-2 leading-tight hidden lg:block">
+            <span className="text-xl font-black text-primary block">SATYAM</span>
+            <span className="text-sm font-bold text-secondary tracking-widest">DIGITAL</span>
+          </div>
+        </Link>
+
+        <div className="flex-1 relative hidden md:block">
+          <Input 
+            placeholder="Search for Mobiles, Accessories, TV & more..." 
+            className="w-full pl-4 pr-12 h-11 border-2 border-primary/20 focus-visible:border-primary rounded-full"
+          />
+          <Button size="icon" className="absolute right-1 top-1 h-9 w-9 rounded-full bg-primary hover:bg-primary/90">
+            <Search className="h-4 w-4 text-white" />
+          </Button>
+        </div>
+
+        <div className="flex items-center gap-6 shrink-0">
+          <div className="flex flex-col items-center cursor-pointer group">
+            <User className="h-6 w-6 text-gray-600 group-hover:text-primary" />
+            <span className="text-[10px] font-medium text-gray-500 group-hover:text-primary">Login</span>
+          </div>
+          <div className="flex flex-col items-center cursor-pointer group relative">
+            <ShoppingCart className="h-6 w-6 text-gray-600 group-hover:text-primary" />
+            <span className="text-[10px] font-medium text-gray-500 group-hover:text-primary">Cart</span>
+            <span className="absolute -top-1 -right-1 bg-secondary text-primary text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Category Bar */}
+      <div className="border-t bg-white hidden lg:block">
+        <div className="container flex items-center gap-8 py-2">
+          <Button variant="ghost" className="font-bold text-primary gap-2">
+            <Menu className="h-4 w-4" /> Shop By Category
+          </Button>
+          <nav className="flex items-center gap-6 text-sm font-medium text-gray-700">
+            <Link to="/" className="hover:text-primary">Mobiles</Link>
+            <Link to="/" className="hover:text-primary">Laptops</Link>
+            <Link to="/" className="hover:text-primary">Smart TV</Link>
+            <Link to="/" className="hover:text-primary">Appliances</Link>
+            <Link to="/" className="hover:text-primary">Accessories</Link>
+            <Link to="/" className="text-red-600 font-bold">Offers</Link>
+          </nav>
+        </div>
+      </div>
+    </header>
   );
 };

@@ -2,107 +2,171 @@ import { useState } from 'react';
 import { useStore } from '../hooks/useStore';
 import { Navbar } from '../components/Navbar';
 import { ProductCard } from '../components/ProductCard';
-import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
-import { Search, Filter } from 'lucide-react';
+import { Smartphone, Tv, Laptop, Watch, Speaker, Refrigerator } from 'lucide-react';
 
 const Index = () => {
   const { products, categories, brands } = useStore();
-  const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const filteredProducts = products.filter(p => {
-    const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase()) || 
-                         p.description.toLowerCase().includes(search.toLowerCase());
-    const matchesCategory = selectedCategory ? p.categoryId === selectedCategory : true;
-    return matchesSearch && matchesCategory;
+    return selectedCategory ? p.categoryId === selectedCategory : true;
   });
 
+  const quickLinks = [
+    { id: 'mobiles', name: 'Mobiles', icon: Smartphone },
+    { id: 'electronics', name: 'Smart TV', icon: Tv },
+    { id: 'laptops', name: 'Laptops', icon: Laptop },
+    { id: 'watches', name: 'Watches', icon: Watch },
+    { id: 'audio', name: 'Audio', icon: Speaker },
+    { id: 'appliances', name: 'Appliances', icon: Refrigerator },
+  ];
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#f4f4f4]">
       <Navbar />
       
-      {/* Hero Section */}
-      <section className="relative bg-primary py-20 text-primary-foreground overflow-hidden">
-        <div className="container relative z-10">
-          <div className="max-w-2xl">
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl mb-6">
-              Your One-Stop Shop for Digital Excellence
+      {/* Hero Banner */}
+      <section className="container py-6">
+        <div className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-primary to-blue-900 h-[300px] md:h-[400px] flex items-center">
+          <div className="px-8 md:px-16 max-w-xl relative z-10">
+            <Badge className="bg-secondary text-primary font-bold mb-4">FESTIVAL SALE IS LIVE</Badge>
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-4 leading-tight">
+              Upgrade Your <span className="text-secondary">Digital Life</span>
             </h1>
-            <p className="text-xl text-primary-foreground/80 mb-8">
-              Discover the latest in mobiles, home appliances, and electronics at Satyam Digital. Quality products, unbeatable prices.
+            <p className="text-white/80 text-lg mb-8">
+              Get up to 40% off on latest smartphones and home appliances.
             </p>
+            <button className="bg-secondary text-primary font-black px-8 py-3 rounded-full hover:scale-105 transition-transform">
+              SHOP NOW
+            </button>
           </div>
-        </div>
-        <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
-          <Search className="w-full h-full" />
+          <div className="absolute right-0 bottom-0 w-1/2 h-full opacity-20 md:opacity-100">
+            <img 
+              src="https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&q=80&w=800" 
+              alt="Hero" 
+              className="h-full w-full object-cover"
+            />
+          </div>
         </div>
       </section>
 
-      <main className="container py-12">
-        <div className="flex flex-col md:flex-row gap-8 items-start">
-          {/* Sidebar Filters */}
-          <aside className="w-full md:w-64 space-y-8">
-            <div className="space-y-4">
-              <h3 className="font-semibold flex items-center gap-2">
-                <Filter className="h-4 w-4" /> Categories
-              </h3>
-              <div className="flex flex-wrap md:flex-col gap-2">
-                <Badge 
-                  variant={selectedCategory === null ? "default" : "outline"}
-                  className="cursor-pointer px-4 py-2 text-sm"
-                  onClick={() => setSelectedCategory(null)}
-                >
-                  All Products
-                </Badge>
-                {categories.map(cat => (
-                  <Badge 
-                    key={cat.id}
-                    variant={selectedCategory === cat.id ? "default" : "outline"}
-                    className="cursor-pointer px-4 py-2 text-sm"
-                    onClick={() => setSelectedCategory(cat.id)}
-                  >
-                    {cat.name}
-                  </Badge>
-                ))}
+      {/* Quick Category Links */}
+      <section className="container py-8">
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
+          {quickLinks.map((link) => (
+            <div 
+              key={link.id}
+              onClick={() => setSelectedCategory(link.id)}
+              className={`flex flex-col items-center p-4 rounded-2xl bg-white shadow-sm cursor-pointer hover:shadow-md transition-all border-2 ${selectedCategory === link.id ? 'border-primary' : 'border-transparent'}`}
+            >
+              <div className="h-12 w-12 rounded-full bg-primary/5 flex items-center justify-center mb-2">
+                <link.icon className="h-6 w-6 text-primary" />
               </div>
+              <span className="text-xs font-bold text-gray-700">{link.name}</span>
             </div>
-          </aside>
+          ))}
+        </div>
+      </section>
 
-          {/* Product Grid */}
-          <div className="flex-1 space-y-8">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input 
-                placeholder="Search products..." 
-                className="pl-10 h-12 text-lg"
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-              />
-            </div>
-
-            {filteredProducts.length > 0 ? (
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {filteredProducts.map(product => (
-                  <ProductCard 
-                    key={product.id} 
-                    product={product}
-                    category={categories.find(c => c.id === product.categoryId)}
-                    brand={brands.find(b => b.id === product.brandId)}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-20">
-                <p className="text-xl text-muted-foreground">No products found matching your criteria.</p>
-              </div>
-            )}
+      <main className="container py-8">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl font-black text-gray-800 flex items-center gap-2">
+            <span className="w-2 h-8 bg-primary rounded-full"></span>
+            Trending Products
+          </h2>
+          <div className="flex gap-2">
+            <Badge 
+              variant={selectedCategory === null ? "default" : "outline"}
+              className="cursor-pointer"
+              onClick={() => setSelectedCategory(null)}
+            >
+              All
+            </Badge>
+            {categories.map(cat => (
+              <Badge 
+                key={cat.id}
+                variant={selectedCategory === cat.id ? "default" : "outline"}
+                className="cursor-pointer"
+                onClick={() => setSelectedCategory(cat.id)}
+              >
+                {cat.name}
+              </Badge>
+            ))}
           </div>
         </div>
+
+        {filteredProducts.length > 0 ? (
+          <div className="grid gap-6 grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+            {filteredProducts.map(product => (
+              <ProductCard 
+                key={product.id} 
+                product={product}
+                category={categories.find(c => c.id === product.categoryId)}
+                brand={brands.find(b => b.id === product.brandId)}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="bg-white rounded-2xl p-20 text-center shadow-sm">
+            <p className="text-xl text-muted-foreground">No products found in this category.</p>
+          </div>
+        )}
       </main>
 
-      <footer className="border-t py-12 bg-muted/30">
-        <div className="container text-center text-muted-foreground">
+      {/* Features Section */}
+      <section className="bg-white border-t mt-12 py-12">
+        <div className="container grid grid-cols-2 md:grid-cols-4 gap-8">
+          {[
+            { title: 'Free Delivery', desc: 'On orders above ₹999' },
+            { title: 'Easy Returns', desc: '7 Days return policy' },
+            { title: 'Secure Payment', desc: '100% safe transactions' },
+            { title: '24/7 Support', desc: 'Dedicated help center' },
+          ].map((feat, i) => (
+            <div key={i} className="text-center">
+              <h4 className="font-bold text-primary">{feat.title}</h4>
+              <p className="text-xs text-gray-500">{feat.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <footer className="bg-primary text-white py-12">
+        <div className="container grid md:grid-cols-4 gap-8">
+          <div className="space-y-4">
+            <img src="/logo.png" alt="Logo" className="h-10 brightness-0 invert" />
+            <p className="text-sm text-white/60">
+              Satyam Digital is your trusted partner for all things electronic. We bring you the best brands at the best prices.
+            </p>
+          </div>
+          <div>
+            <h4 className="font-bold mb-4">Quick Links</h4>
+            <ul className="text-sm text-white/60 space-y-2">
+              <li>About Us</li>
+              <li>Contact Us</li>
+              <li>Store Locator</li>
+              <li>Careers</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold mb-4">Policies</h4>
+            <ul className="text-sm text-white/60 space-y-2">
+              <li>Privacy Policy</li>
+              <li>Terms & Conditions</li>
+              <li>Shipping Policy</li>
+              <li>Return Policy</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold mb-4">Newsletter</h4>
+            <p className="text-sm text-white/60 mb-4">Subscribe to get latest updates and offers.</p>
+            <div className="flex gap-2">
+              <input className="bg-white/10 border-none rounded-lg px-4 py-2 text-sm flex-1" placeholder="Email" />
+              <button className="bg-secondary text-primary font-bold px-4 py-2 rounded-lg text-sm">Join</button>
+            </div>
+          </div>
+        </div>
+        <div className="container border-t border-white/10 mt-12 pt-8 text-center text-sm text-white/40">
           <p>© 2024 Satyam Digital. All rights reserved.</p>
         </div>
       </footer>
