@@ -90,9 +90,10 @@ export const Navbar = () => {
   const categoriesList = [
     { id: 'mobiles', name: 'Mobiles', icon: Smartphone },
     { id: 'laptops', name: 'Laptops', icon: Laptop },
-    { id: 'electronics', name: 'Smart TV', icon: Tv },
+    { id: 'smart-tv', name: 'Smart TV', icon: Tv }, // Updated ID and name
     { id: 'appliances', name: 'Appliances', icon: Refrigerator },
-    { id: 'audio', name: 'Accessories', icon: Speaker },
+    { id: 'watches', name: 'Watches', icon: Watch },
+    { id: 'accessories', name: 'Accessories', icon: Speaker }, // Updated ID and name
   ];
 
   return (

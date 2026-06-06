@@ -24,16 +24,59 @@ const initialData: StoreData = {
       name: 'Samsung Neo QLED 4K',
       description: 'Experience stunning 4K resolution with Quantum Mini LEDs.',
       price: 85000,
-      categoryId: 'electronics',
+      categoryId: 'smart-tv', // Changed from 'electronics'
       brandId: 'samsung',
       image: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&q=80&w=800',
       images: ['https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&q=80&w=800']
+    },
+    {
+      id: '3',
+      name: 'MacBook Air M3',
+      description: 'Incredibly thin and fast laptop from Apple.',
+      price: 119000,
+      categoryId: 'laptops',
+      brandId: 'apple',
+      image: 'https://images.unsplash.com/photo-1694709841893-9c8827725514?auto=format&fit=crop&q=80&w=800',
+      images: ['https://images.unsplash.com/photo-1694709841893-9c8827725514?auto=format&fit=crop&q=80&w=800']
+    },
+    {
+      id: '4',
+      name: 'Sony WH-1000XM5',
+      description: 'Industry-leading noise canceling headphones.',
+      price: 28000,
+      categoryId: 'accessories', // Changed from 'audio'
+      brandId: 'sony',
+      image: 'https://images.unsplash.com/photo-1621370729790-2e3d3e6c3f0b?auto=format&fit=crop&q=80&w=800',
+      images: ['https://images.unsplash.com/photo-1621370729790-2e3d3e6c3f0b?auto=format&fit=crop&q=80&w=800']
+    },
+    {
+      id: '5',
+      name: 'LG Smart Refrigerator',
+      description: 'Large capacity smart refrigerator with InstaView Door-in-Door.',
+      price: 95000,
+      categoryId: 'appliances',
+      brandId: 'lg',
+      image: 'https://images.unsplash.com/photo-1563229977-3e1b7f0c1c4f?auto=format&fit=crop&q=80&w=800',
+      images: ['https://images.unsplash.com/photo-1563229977-3e1b7f0c1c4f?auto=format&fit=crop&q=80&w=800']
+    },
+    {
+      id: '6',
+      name: 'Apple Watch Series 9',
+      description: 'Advanced health and fitness features in a sleek design.',
+      price: 41900,
+      categoryId: 'watches',
+      brandId: 'apple',
+      image: 'https://images.unsplash.com/photo-1698299292864-d922a901e188?auto=format&fit=crop&q=80&w=800',
+      images: ['https://images.unsplash.com/photo-1698299292864-d922a901e188?auto=format&fit=crop&q=80&w=800']
     }
   ],
   categories: [
     { id: 'mobiles', name: 'Mobiles' },
-    { id: 'electronics', name: 'Electronics' },
-    { id: 'appliances', name: 'Home Appliances' }
+    { id: 'laptops', name: 'Laptops' },
+    { id: 'smart-tv', name: 'Smart TV' }, // New category
+    { id: 'appliances', name: 'Appliances' },
+    { id: 'watches', name: 'Watches' },
+    { id: 'accessories', name: 'Accessories' } // New category
   ],
   brands: [
     { id: 'apple', name: 'Apple' },
@@ -176,6 +219,24 @@ export function useStore() {
     }
   };
 
+  const updateCategory = async (updatedCategory: Category) => {
+    // Optimistic update
+    setData(prev => ({
+      ...prev,
+      categories: prev.categories.map(c => c.id === updatedCategory.id ? updatedCategory : c)
+    }));
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { error } = await supabase.from('categories').update(updatedCategory).eq('id', updatedCategory.id);
+        if (error) throw error;
+      } catch (err: any) {
+        console.error("Supabase category update error:", err);
+        showError(`Failed to update category: ${err?.message || String(err)}`);
+      }
+    }
+  };
+
   const deleteCategory = async (id: string) => {
     // Optimistic update
     setData(prev => ({ ...prev, categories: prev.categories.filter(c => c.id !== id) }));
@@ -204,6 +265,24 @@ export function useStore() {
       } catch (err: any) { // Type 'any' for better error handling from Supabase
         console.error("Supabase brand insert error:", err);
         showError(`Failed to add brand: ${err?.message || String(err)}`);
+      }
+    }
+  };
+
+  const updateBrand = async (updatedBrand: Brand) => {
+    // Optimistic update
+    setData(prev => ({
+      ...prev,
+      brands: prev.brands.map(b => b.id === updatedBrand.id ? updatedBrand : b)
+    }));
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { error } = await supabase.from('brands').update(updatedBrand).eq('id', updatedBrand.id);
+        if (error) throw error;
+      } catch (err: any) {
+        console.error("Supabase brand update error:", err);
+        showError(`Failed to update brand: ${err?.message || String(err)}`);
       }
     }
   };
@@ -279,8 +358,10 @@ export function useStore() {
     updateProduct,
     deleteProduct,
     addCategory,
+    updateCategory, // Added updateCategory
     deleteCategory,
     addBrand,
+    updateBrand, // Added updateBrand
     deleteBrand,
     addBanner,
     updateBanner,

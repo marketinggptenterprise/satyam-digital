@@ -41,11 +41,11 @@ CREATE TABLE banners (
 -- Optional: Insert initial data (uncomment if you want to re-populate with starter data after clearing)
 INSERT INTO categories (id, name) VALUES
 ('mobiles', 'Mobiles'),
-('electronics', 'Electronics'),
-('appliances', 'Home Appliances'),
 ('laptops', 'Laptops'),
+('smart-tv', 'Smart TV'), -- Updated category
+('appliances', 'Appliances'),
 ('watches', 'Watches'),
-('audio', 'Audio');
+('accessories', 'Accessories'); -- Updated category
 
 INSERT INTO brands (id, name) VALUES
 ('apple', 'Apple'),
@@ -55,9 +55,9 @@ INSERT INTO brands (id, name) VALUES
 
 INSERT INTO products (id, name, description, price, "categoryId", "brandId", image, images) VALUES
 ('1', 'iPhone 15 Pro', 'The latest flagship from Apple with Titanium design.', 129900, 'mobiles', 'apple', 'https://images.unsplash.com/photo-1696446701796-da61225697cc?auto=format&fit=crop&q=80&w=800', ARRAY['https://images.unsplash.com/photo-1696446701796-da61225697cc?auto=format&fit=crop&q=80&w=800']),
-('2', 'Samsung Neo QLED 4K', 'Experience stunning 4K resolution with Quantum Mini LEDs.', 85000, 'electronics', 'samsung', 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&q=80&w=800', ARRAY['https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&q=80&w=800']),
+('2', 'Samsung Neo QLED 4K', 'Experience stunning 4K resolution with Quantum Mini LEDs.', 85000, 'smart-tv', 'samsung', 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&q=80&w=800', ARRAY['https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&q=80&w=800']),
 ('3', 'MacBook Air M3', 'Incredibly thin and fast laptop from Apple.', 119000, 'laptops', 'apple', 'https://images.unsplash.com/photo-1694709841893-9c8827725514?auto=format&fit=crop&q=80&w=800', ARRAY['https://images.unsplash.com/photo-1694709841893-9c8827725514?auto=format&fit=crop&q=80&w=800']),
-('4', 'Sony WH-1000XM5', 'Industry-leading noise canceling headphones.', 28000, 'audio', 'sony', 'https://images.unsplash.com/photo-1621370729790-2e3d3e6c3f0b?auto=format&fit=crop&q=80&w=800', ARRAY['https://images.unsplash.com/photo-1621370729790-2e3d3e6c3f0b?auto=format&fit=crop&q=80&w=800']),
+('4', 'Sony WH-1000XM5', 'Industry-leading noise canceling headphones.', 28000, 'accessories', 'sony', 'https://images.unsplash.com/photo-1621370729790-2e3d3e6c3f0b?auto=format&fit=crop&q=80&w=800', ARRAY['https://images.unsplash.com/photo-1621370729790-2e3d3e6c3f0b?auto=format&fit=crop&q=80&w=800']),
 ('5', 'LG Smart Refrigerator', 'Large capacity smart refrigerator with InstaView Door-in-Door.', 95000, 'appliances', 'lg', 'https://images.unsplash.com/photo-1563229977-3e1b7f0c1c4f?auto=format&fit=crop&q=80&w=800', ARRAY['https://images.unsplash.com/photo-1563229977-3e1b7f0c1c4f?auto=format&fit=crop&q=80&w=800']),
 ('6', 'Apple Watch Series 9', 'Advanced health and fitness features in a sleek design.', 41900, 'watches', 'apple', 'https://images.unsplash.com/photo-1698299292864-d922a901e188?auto=format&fit=crop&q=80&w=800', ARRAY['https://images.unsplash.com/photo-1698299292864-d922a901e188?auto=format&fit=crop&q=80&w=800']);
 

@@ -28,11 +28,11 @@ const Index = () => {
 
   const quickLinks = [
     { id: 'mobiles', name: 'Mobiles', icon: Smartphone },
-    { id: 'electronics', name: 'Smart TV', icon: Tv },
     { id: 'laptops', name: 'Laptops', icon: Laptop },
-    { id: 'watches', name: 'Watches', icon: Watch },
-    { id: 'audio', name: 'Audio', icon: Speaker },
+    { id: 'smart-tv', name: 'Smart TV', icon: Tv }, // Updated ID and name
     { id: 'appliances', name: 'Appliances', icon: Refrigerator },
+    { id: 'watches', name: 'Watches', icon: Watch },
+    { id: 'accessories', name: 'Accessories', icon: Speaker }, // Updated ID and name
   ];
 
   const clearFilters = () => {
