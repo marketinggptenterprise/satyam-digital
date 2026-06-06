@@ -1,1 +1,134 @@
-"use client"; import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet"; import { Button } from "./ui/button"; import { ShoppingCart, Minus, Plus, Trash2, MessageSquare } from "lucide-react"; import { useCart } from "../hooks/useCart"; import { Separator } from "./ui/separator"; export const CartDrawer = () => { const { cart, updateQuantity, removeFromCart, subtotal, totalItems } = useCart(); const handleWhatsAppCheckout = () => { const phoneNumber = "918918700120"; const productDetails = cart.map(item => `• *${item.name}*\n  Qty: ${item.quantity}\n  Price: ₹${(item.price * item.quantity).toLocaleString('en-IN')}\n  Image: ${item.image}`).join('\n\n'); const message = `Hello Satyam Digital! I would like to place an order:\n\n${productDetails}\n\n*Grand Total: ₹${subtotal.toLocaleString('en-IN')}*\n\nPlease confirm my order.`; const encodedMessage = encodeURIComponent(message); window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank'); }; return ( <Sheet> <SheetTrigger asChild> <Button variant="ghost" className="flex flex-col items-center gap-1 p-2 relative"> <ShoppingCart className="h-6 w-6 text-gray-600 group-hover:text-primary" /> <span className="text-[10px] font-medium text-gray-500">Cart</span> {totalItems > 0 && ( <span className="absolute -top-1 -right-1 bg-secondary text-primary text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center animate-in zoom-in"> {totalItems} </span> )} </Button> </SheetTrigger> <SheetContent className="w-full sm:max-w-md flex flex-col p-0"> <SheetHeader className="p-6 border-b"> <SheetTitle className="flex items-center gap-2"> Your Order <span className="text-sm font-normal text-muted-foreground">({totalItems} items)</span> </SheetTitle> </SheetHeader> <div className="flex-1 overflow-y-auto p-6 space-y-6"> {cart.length === 0 ? ( <div className="h-full flex flex-col items-center justify-center text-center space-y-4"> <div className="h-20 w-20 rounded-full bg-muted flex items-center justify-center"> <ShoppingCart className="h-10 w-10 text-muted-foreground" /> </div> <p className="text-muted-foreground">Your cart is empty</p> </div> ) : ( cart.map((item) => ( <div key={item.id} className="flex gap-4"> <div className="h-20 w-20 rounded-lg bg-muted overflow-hidden shrink-0"> <img src={item.image} alt={item.name} className="h-full w-full object-cover" /> </div> <div className="flex-1 space-y-1"> <h4 className="text-sm font-bold line-clamp-1">{item.name}</h4> <p className="text-xs text-muted-foreground">₹{item.price.toLocaleString('en-IN')}</p> <div className="flex items-center justify-between pt-2"> <div className="flex items-center border rounded-lg"> <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => updateQuantity(item.id, -1)}> <Minus className="h-3 w-3" /> </Button> <span className="w-8 text-center text-sm font-bold">{item.quantity}</span> <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => updateQuantity(item.id, 1)}> <Plus className="h-3 w-3" /> </Button> </div> <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => removeFromCart(item.id)}> <Trash2 className="h-4 w-4" /> </Button> </div> </div> </div> ) } </div> {cart.length > 0 && ( <div className="p-6 border-t bg-muted/30 space-y-4"> <div className="space-y-2"> <div className="flex justify-between text-sm"> <span className="text-muted-foreground">Subtotal</span> <span>₹{subtotal.toLocaleString('en-IN')}</span> </div> <Separator /> <div className="flex justify-between font-black text-lg"> <span>GRAND TOTAL</span> <span className="text-primary">₹{subtotal.toLocaleString('en-IN')}</span> </div> </div> <Button className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-black py-6 rounded-xl gap-2 text-lg" onClick={handleWhatsAppCheckout}> <MessageSquare className="h-5 w-5" /> PLACE ORDER VIA WHATSAPP </Button> </div> </SheetContent> </Sheet> ); };
+"use client";
+
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
+import { Button } from "./ui/button";
+import { ShoppingCart, Minus, Plus, Trash2, MessageSquare } from "lucide-react";
+import { useCart } from "../hooks/useCart";
+import { Separator } from "./ui/separator";
+
+export const CartDrawer = () => {
+  const { cart, updateQuantity, removeFromCart, subtotal, totalItems } = useCart();
+
+  const handleWhatsAppCheckout = () => {
+    const phoneNumber = "918918700120";
+
+    const productDetails = cart
+      .map(
+        (item) =>
+          `• *${item.name}*\n  Qty: ${item.quantity}\n  Price: ₹${(
+            item.price * item.quantity
+          ).toLocaleString("en-IN")}\n  Image: ${item.image}`,
+      )
+      .join("\n\n");
+
+    const message = `Hello Satyam Digital! I would like to place an order:\n\n${productDetails}\n\n*Grand Total: ₹${subtotal.toLocaleString(
+      "en-IN",
+    )}*\n\nPlease confirm my order.`;
+
+    const encodedMessage = encodeURIComponent(message);
+    window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, "_blank");
+  };
+
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="ghost" className="flex flex-col items-center gap-1 p-2 relative">
+          <ShoppingCart className="h-6 w-6 text-gray-600 group-hover:text-primary" />
+          <span className="text-[10px] font-medium text-gray-500">Cart</span>
+          {totalItems > 0 && (
+            <span className="absolute -top-1 -right-1 bg-secondary text-primary text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center animate-in zoom-in">
+              {totalItems}
+            </span>
+          )}
+        </Button>
+      </SheetTrigger>
+
+      <SheetContent className="w-full sm:max-w-md flex flex-col p-0">
+        <SheetHeader className="p-6 border-b">
+          <SheetTitle className="flex items-center gap-2">
+            Your Order{" "}
+            <span className="text-sm font-normal text-muted-foreground">
+              ({totalItems} items)
+            </span>
+          </SheetTitle>
+        </SheetHeader>
+
+        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+          {cart.length === 0 ? (
+            <div className="h-full flex flex-col items-center justify-center text-center space-y-4">
+              <div className="h-20 w-20 rounded-full bg-muted flex items-center justify-center">
+                <ShoppingCart className="h-10 w-10 text-muted-foreground" />
+              </div>
+              <p className="text-muted-foreground">Your cart is empty</p>
+            </div>
+          ) : (
+            cart.map((item) => (
+              <div key={item.id} className="flex gap-4">
+                <div className="h-20 w-20 rounded-lg bg-muted overflow-hidden shrink-0">
+                  <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
+                </div>
+                <div className="flex-1 space-y-1">
+                  <h4 className="text-sm font-bold line-clamp-1">{item.name}</h4>
+                  <p className="text-xs text-muted-foreground">
+                    ₹{item.price.toLocaleString("en-IN")}
+                  </p>
+                  <div className="flex items-center justify-between pt-2">
+                    <div className="flex items-center border rounded-lg">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() => updateQuantity(item.id, -1)}
+                      >
+                        <Minus className="h-3 w-3" />
+                      </Button>
+                      <span className="w-8 text-center text-sm font-bold">{item.quantity}</span>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() => updateQuantity(item.id, 1)}
+                      >
+                        <Plus className="h-3 w-3" />
+                      </Button>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-destructive"
+                      onClick={() => removeFromCart(item.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {cart.length > 0 && (
+          <div className="p-6 border-t bg-muted/30 space-y-4">
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Subtotal</span>
+                <span>₹{subtotal.toLocaleString("en-IN")}</span>
+              </div>
+              <Separator />
+              <div className="flex justify-between font-black text-lg">
+                <span>GRAND TOTAL</span>
+                <span className="text-primary">₹{subtotal.toLocaleString("en-IN")}</span>
+              </div>
+            </div>
+            <Button
+              className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-black py-6 rounded-xl gap-2 text-lg"
+              onClick={handleWhatsAppCheckout}
+            >
+              <MessageSquare className="h-5 w-5" /> PLACE ORDER VIA WHATSAPP
+            </Button>
+          </div>
+        )}
+      </SheetContent>
+    </Sheet>
+  );
+};
