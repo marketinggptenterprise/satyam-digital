@@ -6,7 +6,7 @@ import { Button } from './ui/button';
 import { ShoppingCart, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useCart } from '../hooks/useCart';
 import { showSuccess } from '../utils/toast';
-import { Link } from 'react-router-dom'; // Import Link
+import { Link } from 'react-router-dom';
 
 interface ProductCardProps {
   product: Product;
@@ -17,36 +17,56 @@ interface ProductCardProps {
 export const ProductCard = ({ product, category, brand }: ProductCardProps) => {
   const { addToCart } = useCart();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const discountPrice = product.price * 1.2;
+
+  // Calculate selling price based on discount percentage
+  const hasDiscount = product.discountPercent && product.discountPercent > 0;
+  const sellingPrice = hasDiscount 
+    ? product.price * (1 - (product.discountPercent || 0) / 100) 
+    : product.price;
+  const originalPrice = product.price;
 
   // Ensure product.images is an array and filter out non-string or empty images
   const safeImages = Array.isArray(product.images) ? product.images : [];
   const filteredImages = safeImages.filter(img => typeof img === 'string' && img.trim() !== '');
   const imagesList = filteredImages.length > 0 ? filteredImages : [product.image];
 
-
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (product.inStock === false) return;
     addToCart(product);
     showSuccess(`${product.name} added to cart!`);
   };
 
   const nextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     setCurrentImageIndex((prev) => (prev + 1) % imagesList.length);
   };
 
   const prevImage = (e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     setCurrentImageIndex((prev) => (prev - 1 + imagesList.length) % imagesList.length);
   };
 
   return (
     <Card className="group relative bg-white/40 dark:bg-zinc-900/40 backdrop-blur-xl border border-white/20 dark:border-zinc-800/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.04)] hover:shadow-[0_8px_32px_0_rgba(0,0,0,0.12)] hover:-translate-y-1.5 transition-all duration-300 rounded-2xl overflow-hidden flex flex-col h-full">
-      <Link to={`/product/${product.id}`} className="block"> {/* Wrap content in Link */}
-        <div className="absolute top-3 left-3 z-10">
-          <Badge className="bg-secondary text-primary font-bold text-[10px] border-none rounded-full px-2.5 py-0.5">
-            OFFER
-          </Badge>
+      <Link to={`/product/${product.id}`} className="block flex-grow">
+        <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
+          {product.inStock === false ? (
+            <Badge variant="destructive" className="font-bold text-[10px] border-none rounded-full px-2.5 py-0.5">
+              OUT OF STOCK
+            </Badge>
+          ) : hasDiscount ? (
+            <Badge className="bg-red-500 text-white font-bold text-[10px] border-none rounded-full px-2.5 py-0.5">
+              {product.discountPercent}% OFF
+            </Badge>
+          ) : (
+            <Badge className="bg-secondary text-primary font-bold text-[10px] border-none rounded-full px-2.5 py-0.5">
+              OFFER
+            </Badge>
+          )}
         </div>
         
         {/* Image Carousel */}
@@ -54,7 +74,7 @@ export const ProductCard = ({ product, category, brand }: ProductCardProps) => {
           <img 
             src={imagesList[currentImageIndex]} 
             alt={product.name} 
-            className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
+            className={`h-full w-full object-contain transition-transform duration-500 group-hover:scale-105 ${product.inStock === false ? 'opacity-50' : ''}`}
           />
           
           {imagesList.length > 1 && (
@@ -85,7 +105,7 @@ export const ProductCard = ({ product, category, brand }: ProductCardProps) => {
           )}
         </div>
 
-        <CardContent className="p-5 flex flex-col flex-grow justify-between">
+        <CardContent className="p-5 flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-1 mb-1.5">
               {[1, 2, 3, 4, 5].map((i) => (
@@ -106,21 +126,28 @@ export const ProductCard = ({ product, category, brand }: ProductCardProps) => {
           <div>
             <div className="flex items-baseline gap-2 mb-4">
               <span className="text-lg font-black text-primary">
-                ₹{product.price.toLocaleString('en-IN')}
+                ₹{sellingPrice.toLocaleString('en-IN')}
               </span>
-              <span className="text-xs text-gray-400 line-through">
-                ₹{discountPrice.toLocaleString('en-IN')}
-              </span>
+              {hasDiscount && (
+                <span className="text-xs text-gray-400 line-through">
+                  ₹{originalPrice.toLocaleString('en-IN')}
+                </span>
+              )}
             </div>
           </div>
         </CardContent>
       </Link>
-      <div className="p-5 pt-0"> {/* Add to cart button outside the link */}
+      <div className="p-5 pt-0 mt-auto">
         <Button 
           onClick={handleAddToCart}
-          className="w-full bg-primary hover:bg-primary/90 text-white font-bold rounded-xl gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-md"
+          disabled={product.inStock === false}
+          className={`w-full font-bold rounded-xl gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-md ${
+            product.inStock === false 
+              ? 'bg-gray-300 text-gray-500 dark:bg-zinc-800 dark:text-zinc-500 cursor-not-allowed' 
+              : 'bg-primary hover:bg-primary/90 text-white'
+          }`}
         >
-          <ShoppingCart className="h-4 w-4" /> Add to Cart
+          <ShoppingCart className="h-4 w-4" /> {product.inStock === false ? 'Out of Stock' : 'Add to Cart'}
         </Button>
       </div>
     </Card>

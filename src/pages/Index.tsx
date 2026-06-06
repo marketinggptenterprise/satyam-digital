@@ -7,8 +7,9 @@ import { ProductCard } from '../components/ProductCard';
 import { HeroSlider } from '../components/HeroSlider';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
-import { Smartphone, Tv, Laptop, Watch, Speaker, Refrigerator, X } from 'lucide-react';
+import { Smartphone, Tv, Laptop, Watch, Speaker, Refrigerator, X, Percent } from 'lucide-react';
 import { Input } from '../components/ui/input';
+import { Banner } from '../types/store';
 
 const Index = () => {
   const { products, categories, brands, banners } = useStore();
@@ -17,7 +18,15 @@ const Index = () => {
   const selectedCategory = searchParams.get('cat');
   const searchQuery = searchParams.get('q');
 
+  // Offers section logic: "if I have a discount then if I click on featured product it will automatically show in the offers section"
+  // When q=offer is active, we filter products that are featured AND have a discount > 0.
+  const isOffersSection = searchQuery?.toLowerCase() === 'offer';
+
   const filteredProducts = products.filter(p => {
+    if (isOffersSection) {
+      return p.isFeatured && p.discountPercent && p.discountPercent > 0;
+    }
+
     const matchesCategory = selectedCategory ? p.categoryId === selectedCategory : true;
     const matchesSearch = searchQuery 
       ? p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -26,13 +35,28 @@ const Index = () => {
     return matchesCategory && matchesSearch;
   });
 
+  // Hero Banner logic: "if the product is on sale and offer it should show in the hero banner section"
+  // We map featured products with a discount into Banner format and combine them with custom banners.
+  const productBanners: Banner[] = products
+    .filter(p => p.isFeatured && p.discountPercent && p.discountPercent > 0)
+    .map(p => ({
+      id: `prod-banner-${p.id}`,
+      title: p.name,
+      subtitle: p.description,
+      badge: `${p.discountPercent}% OFF SPECIAL OFFER`,
+      image: p.images?.[0] || p.image,
+      link: `/product/${p.id}`
+    }));
+
+  const allBanners = [...banners, ...productBanners];
+
   const quickLinks = [
     { id: 'mobiles', name: 'Mobiles', icon: Smartphone },
     { id: 'laptops', name: 'Laptops', icon: Laptop },
-    { id: 'smart-tv', name: 'Smart TV', icon: Tv }, // Updated ID and name
+    { id: 'smart-tv', name: 'Smart TV', icon: Tv },
     { id: 'appliances', name: 'Appliances', icon: Refrigerator },
     { id: 'watches', name: 'Watches', icon: Watch },
-    { id: 'accessories', name: 'Accessories', icon: Speaker }, // Updated ID and name
+    { id: 'accessories', name: 'Accessories', icon: Speaker },
   ];
 
   const clearFilters = () => {
@@ -47,7 +71,7 @@ const Index = () => {
       <Navbar />
       
       {/* Hero Slider - Only show on home page without filters */}
-      {!selectedCategory && !searchQuery && <HeroSlider banners={banners} />}
+      {!selectedCategory && !searchQuery && <HeroSlider banners={allBanners} />}
 
       {/* Quick Category Links */}
       <section className="container py-8 relative z-10">
@@ -74,7 +98,13 @@ const Index = () => {
           <div>
             <h2 className="text-2xl font-black text-gray-800 dark:text-white flex items-center gap-2">
               <span className="w-2 h-8 bg-primary rounded-full"></span>
-              {searchQuery ? `Search results for "${searchQuery}"` : selectedCategory ? `${categories.find(c => c.id === selectedCategory)?.name || 'Products'}` : 'Trending Products'}
+              {isOffersSection 
+                ? "Special Offers & Discounts" 
+                : searchQuery 
+                  ? `Search results for "${searchQuery}"` 
+                  : selectedCategory 
+                    ? `${categories.find(c => c.id === selectedCategory)?.name || 'Products'}` 
+                    : 'Trending Products'}
             </h2>
             {(selectedCategory || searchQuery) && (
               <Button variant="link" onClick={clearFilters} className="p-0 h-auto text-xs text-muted-foreground gap-1 mt-1 hover:text-primary transition-colors">
@@ -85,15 +115,18 @@ const Index = () => {
           
           <div className="flex flex-wrap gap-2">
             <Badge 
-              variant={!selectedCategory ? "default" : "outline"}
+              variant={!selectedCategory && !isOffersSection ? "default" : "outline"}
               className="cursor-pointer px-4 py-1 hover:scale-105 transition-transform duration-200 rounded-full"
-              onClick={() => {
-                const params = new URLSearchParams(searchParams);
-                params.delete('cat');
-                setSearchParams(params);
-              }}
+              onClick={clearFilters}
             >
               All
+            </Badge>
+            <Badge 
+              variant={isOffersSection ? "default" : "outline"}
+              className="cursor-pointer px-4 py-1 hover:scale-105 transition-transform duration-200 rounded-full bg-red-500/10 text-red-600 border-red-500/20 hover:bg-red-500/20"
+              onClick={() => setSearchParams({ q: 'offer' })}
+            >
+              <Percent className="h-3 w-3 mr-1" /> Offers
             </Badge>
             {categories.map(cat => (
               <Badge 
@@ -103,6 +136,7 @@ const Index = () => {
                 onClick={() => {
                   const params = new URLSearchParams(searchParams);
                   params.set('cat', cat.id);
+                  params.delete('q'); // Clear search query when switching categories
                   setSearchParams(params);
                 }}
               >

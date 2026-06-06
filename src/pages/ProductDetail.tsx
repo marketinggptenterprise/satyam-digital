@@ -9,7 +9,7 @@ import { BreadcrumbNav } from '../components/BreadcrumbNav';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { Label } from '@/components/ui/label'; // Added missing import
+import { Label } from '@/components/ui/label';
 import { Plus, Minus, ShoppingCart, Star, MessageSquare, Phone } from 'lucide-react';
 import { showError, showSuccess } from '../utils/toast';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -63,30 +63,36 @@ const ProductDetail = () => {
   const category = categories.find(c => c.id === product.categoryId);
   const brand = brands.find(b => b.id === product.brandId);
   
-  const originalPrice = product.price * 1.5; // Simulate a higher original price
-  const discountAmount = originalPrice - product.price;
-  const discountPercentage = Math.round((discountAmount / originalPrice) * 100);
+  // Calculate selling price based on discount percentage
+  const hasDiscount = product.discountPercent && product.discountPercent > 0;
+  const sellingPrice = hasDiscount 
+    ? product.price * (1 - (product.discountPercent || 0) / 100) 
+    : product.price;
+  const originalPrice = product.price;
+  const discountAmount = originalPrice - sellingPrice;
+  const discountPercentage = product.discountPercent || 0;
 
   const handleAddToCart = () => {
+    if (product.inStock === false) return;
     addToCart({ ...product, quantity: quantity });
     showSuccess(`${quantity}x ${product.name} added to cart!`);
   };
 
   const handleBuyNow = () => {
-    addToCart({ ...product, quantity: quantity }); // For now, Buy Now acts like Add to Cart
-    showSuccess(`${quantity}x ${product.name} added to cart. Proceeding to checkout (feature coming soon!).`);
-    // In a real app, you would navigate to a checkout page here.
+    if (product.inStock === false) return;
+    addToCart({ ...product, quantity: quantity });
+    showSuccess(`${quantity}x ${product.name} added to cart. Proceeding to checkout!`);
   };
 
   const breadcrumbItems = [
     { label: 'Home', href: '/' },
-    { label: 'Products', href: '/#products' }, // Link to products section on home
+    { label: 'Products', href: '/#products' },
     { label: category?.name || 'Category', href: `/?cat=${category?.id}` },
     { label: product.name, href: `/product/${product.id}` },
   ];
 
-  const whatsappPhoneNumber = "919932026227"; // Your WhatsApp number
-  const callPhoneNumber = "+919932026227"; // Your call number
+  const whatsappPhoneNumber = "919932026227";
+  const callPhoneNumber = "+919932026227";
 
   const handleWhatsAppEnquiry = () => {
     const message = encodeURIComponent(`Hello, I'm interested in the product: ${product.name} (ID: ${product.id}). Can you tell me more about it?`);
@@ -116,7 +122,7 @@ const ProductDetail = () => {
                       <img 
                         src={img} 
                         alt={`${product.name} - Image ${index + 1}`} 
-                        className="h-full w-full object-contain max-h-[calc(100%-20px)]"
+                        className={`h-full w-full object-contain max-h-[calc(100%-20px)] ${product.inStock === false ? 'opacity-50' : ''}`}
                       />
                     </div>
                   ))}
@@ -170,6 +176,11 @@ const ProductDetail = () => {
                     {brand.name.toUpperCase()}
                   </Badge>
                 )}
+                {product.inStock === false && (
+                  <Badge variant="destructive" className="font-bold text-xs rounded-full px-3 py-1">
+                    OUT OF STOCK
+                  </Badge>
+                )}
                 <div className="flex items-center text-yellow-500">
                   {[1, 2, 3, 4, 5].map((i) => (
                     <Star key={i} className="h-4 w-4 fill-current" />
@@ -182,20 +193,24 @@ const ProductDetail = () => {
               </h1>
               <div className="flex items-baseline gap-3">
                 <span className="text-4xl font-black text-primary">
-                  ₹{product.price.toLocaleString('en-IN')}
+                  ₹{sellingPrice.toLocaleString('en-IN')}
                 </span>
-                <span className="text-xl text-muted-foreground line-through">
-                  ₹{originalPrice.toLocaleString('en-IN')}
-                </span>
-                {discountPercentage > 0 && (
-                  <Badge className="bg-red-500 text-white font-bold text-sm rounded-full px-3 py-1 animate-pulse">
-                    {discountPercentage}% OFF
-                  </Badge>
+                {hasDiscount && (
+                  <>
+                    <span className="text-xl text-muted-foreground line-through">
+                      ₹{originalPrice.toLocaleString('en-IN')}
+                    </span>
+                    <Badge className="bg-red-500 text-white font-bold text-sm rounded-full px-3 py-1 animate-pulse">
+                      {discountPercentage}% OFF
+                    </Badge>
+                  </>
                 )}
               </div>
-              <p className="text-sm text-green-600 dark:text-green-400 font-semibold">
-                You save ₹{discountAmount.toLocaleString('en-IN')}!
-              </p>
+              {hasDiscount && (
+                <p className="text-sm text-green-600 dark:text-green-400 font-semibold">
+                  You save ₹{discountAmount.toLocaleString('en-IN')}!
+                </p>
+              )}
               <p className="text-xs text-muted-foreground">Inclusive of all taxes</p>
             </div>
 
@@ -217,6 +232,7 @@ const ProductDetail = () => {
                 <Button
                   variant="ghost"
                   size="icon"
+                  disabled={product.inStock === false}
                   className="h-10 w-10 rounded-none hover:bg-muted"
                   onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
                 >
@@ -228,6 +244,7 @@ const ProductDetail = () => {
                 <Button
                   variant="ghost"
                   size="icon"
+                  disabled={product.inStock === false}
                   className="h-10 w-10 rounded-none hover:bg-muted"
                   onClick={() => setQuantity(prev => prev + 1)}
                 >
@@ -239,13 +256,23 @@ const ProductDetail = () => {
             {/* Action Buttons */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
               <Button
-                className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-6 rounded-xl text-lg shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                disabled={product.inStock === false}
+                className={`w-full font-bold py-6 rounded-xl text-lg shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ${
+                  product.inStock === false 
+                    ? 'bg-gray-300 text-gray-500 dark:bg-zinc-800 dark:text-zinc-500 cursor-not-allowed' 
+                    : 'bg-primary hover:bg-primary/90 text-white'
+                }`}
                 onClick={handleAddToCart}
               >
-                <ShoppingCart className="h-5 w-5 mr-2" /> Add to Cart
+                <ShoppingCart className="h-5 w-5 mr-2" /> {product.inStock === false ? 'Out of Stock' : 'Add to Cart'}
               </Button>
               <Button
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-6 rounded-xl text-lg shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                disabled={product.inStock === false}
+                className={`w-full font-bold py-6 rounded-xl text-lg shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ${
+                  product.inStock === false 
+                    ? 'bg-gray-300 text-gray-500 dark:bg-zinc-800 dark:text-zinc-500 cursor-not-allowed' 
+                    : 'bg-orange-500 hover:bg-orange-600 text-white'
+                }`}
                 onClick={handleBuyNow}
               >
                 Buy Now

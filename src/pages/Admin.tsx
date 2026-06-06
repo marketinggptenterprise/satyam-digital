@@ -13,7 +13,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../co
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Badge } from '../components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '../components/ui/dialog';
-import { Plus, Trash2, Edit, Package, Tag, Briefcase, LogOut, Image as ImageIcon, AlertTriangle, CheckCircle2, X } from 'lucide-react';
+import { Switch } from '../components/ui/switch';
+import { Slider } from '../components/ui/slider';
+import { Plus, Trash2, Edit, Package, Tag, Briefcase, LogOut, Image as ImageIcon, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { showSuccess } from '../utils/toast';
 import { isSupabaseConfigured } from '../lib/supabase';
 import { Product, Banner } from '../types/store';
@@ -58,7 +60,10 @@ const Admin = () => {
     categoryId: '',
     brandId: '',
     image: '',
-    images: ['', '', '', '', ''] // 5 image slots
+    images: ['', '', '', '', ''], // 5 image slots
+    inStock: true,
+    isFeatured: false,
+    discountPercent: 0
   });
 
   // Banner Form State
@@ -92,7 +97,10 @@ const Admin = () => {
       categoryId: newProduct.categoryId,
       brandId: newProduct.brandId,
       image: primaryImage,
-      images: validImages.length > 0 ? validImages : [primaryImage]
+      images: validImages.length > 0 ? validImages : [primaryImage],
+      inStock: newProduct.inStock,
+      isFeatured: newProduct.isFeatured,
+      discountPercent: newProduct.discountPercent
     });
 
     setNewProduct({ 
@@ -102,7 +110,10 @@ const Admin = () => {
       categoryId: '', 
       brandId: '', 
       image: '', 
-      images: ['', '', '', '', ''] 
+      images: ['', '', '', '', ''],
+      inStock: true,
+      isFeatured: false,
+      discountPercent: 0
     });
     showSuccess('Product added successfully!');
   };
@@ -210,7 +221,7 @@ const Admin = () => {
             <Card>
               <CardHeader>
                 <CardTitle>Add New Product</CardTitle>
-                <CardDescription>Fill in the details and add up to 5 image links for the product carousel.</CardDescription>
+                <CardDescription>Fill in the details, set stock status, discount percentage, and add up to 5 image links.</CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleAddProduct} className="grid gap-4 md:grid-cols-2">
@@ -224,7 +235,7 @@ const Admin = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="price">Price (₹)</Label>
+                    <Label htmlFor="price">Original Price / MRP (₹)</Label>
                     <Input 
                       id="price" 
                       type="number" 
@@ -258,6 +269,47 @@ const Admin = () => {
                         ))}
                       </SelectContent>
                     </Select>
+                  </div>
+
+                  {/* Stock, Featured, and Discount Controls */}
+                  <div className="space-y-4 md:col-span-2 border p-4 rounded-xl bg-muted/10 grid md:grid-cols-3 gap-4 items-center">
+                    <div className="flex items-center justify-between p-2 bg-background rounded-lg border">
+                      <div className="flex flex-col gap-0.5">
+                        <Label className="font-bold">In Stock</Label>
+                        <span className="text-[10px] text-muted-foreground">Available for purchase</span>
+                      </div>
+                      <Switch 
+                        checked={newProduct.inStock} 
+                        onCheckedChange={val => setNewProduct({...newProduct, inStock: val})} 
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between p-2 bg-background rounded-lg border">
+                      <div className="flex flex-col gap-0.5">
+                        <Label className="font-bold">Featured Product</Label>
+                        <span className="text-[10px] text-muted-foreground">Show in Hero & Offers</span>
+                      </div>
+                      <Switch 
+                        checked={newProduct.isFeatured} 
+                        onCheckedChange={val => setNewProduct({...newProduct, isFeatured: val})} 
+                      />
+                    </div>
+
+                    <div className="flex flex-col gap-2 p-2 bg-background rounded-lg border">
+                      <div className="flex justify-between items-center">
+                        <Label className="font-bold">Discount: {newProduct.discountPercent}%</Label>
+                        {newProduct.discountPercent > 0 && (
+                          <Badge className="bg-red-500 text-white text-[10px]">SALE</Badge>
+                        )}
+                      </div>
+                      <Slider 
+                        value={[newProduct.discountPercent]} 
+                        min={0} 
+                        max={100} 
+                        step={1} 
+                        onValueChange={val => setNewProduct({...newProduct, discountPercent: val[0]})} 
+                      />
+                    </div>
                   </div>
 
                   {/* 5 Image Links */}
@@ -299,7 +351,20 @@ const Admin = () => {
 
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {products.map(product => (
-                <Card key={product.id} className="flex flex-col justify-between">
+                <Card key={product.id} className="flex flex-col justify-between relative overflow-hidden">
+                  {/* Badges */}
+                  <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
+                    {product.inStock === false && (
+                      <Badge variant="destructive" className="font-bold">OUT OF STOCK</Badge>
+                    )}
+                    {product.isFeatured && (
+                      <Badge className="bg-amber-500 text-white font-bold">FEATURED</Badge>
+                    )}
+                    {product.discountPercent && product.discountPercent > 0 ? (
+                      <Badge className="bg-red-500 text-white font-bold">{product.discountPercent}% OFF</Badge>
+                    ) : null}
+                  </div>
+
                   <div>
                     <div className="aspect-video overflow-hidden rounded-t-lg relative bg-white flex items-center justify-center p-2">
                       <img 
@@ -318,7 +383,20 @@ const Admin = () => {
                     </CardHeader>
                     <CardContent className="p-4 pt-0">
                       <p className="text-sm text-muted-foreground line-clamp-2">{product.description}</p>
-                      <p className="mt-2 font-bold text-primary">₹{product.price.toLocaleString('en-IN')}</p>
+                      <div className="mt-2 flex items-baseline gap-2">
+                        {product.discountPercent && product.discountPercent > 0 ? (
+                          <>
+                            <span className="font-bold text-primary">
+                              ₹{(product.price * (1 - product.discountPercent / 100)).toLocaleString('en-IN')}
+                            </span>
+                            <span className="text-xs text-muted-foreground line-through">
+                              ₹{product.price.toLocaleString('en-IN')}
+                            </span>
+                          </>
+                        ) : (
+                          <span className="font-bold text-primary">₹{product.price.toLocaleString('en-IN')}</span>
+                        )}
+                      </div>
                     </CardContent>
                   </div>
                   <div className="p-4 pt-0 flex gap-2">
@@ -550,7 +628,7 @@ const Admin = () => {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="edit-price">Price (₹)</Label>
+                <Label htmlFor="edit-price">Original Price / MRP (₹)</Label>
                 <Input 
                   id="edit-price" 
                   type="number" 
@@ -591,6 +669,47 @@ const Admin = () => {
                       ))}
                     </SelectContent>
                   </Select>
+                </div>
+              </div>
+
+              {/* Edit Stock, Featured, and Discount Controls */}
+              <div className="space-y-4 border p-4 rounded-xl bg-muted/10 grid md:grid-cols-3 gap-4 items-center">
+                <div className="flex items-center justify-between p-2 bg-background rounded-lg border">
+                  <div className="flex flex-col gap-0.5">
+                    <Label className="font-bold">In Stock</Label>
+                    <span className="text-[10px] text-muted-foreground">Available for purchase</span>
+                  </div>
+                  <Switch 
+                    checked={editingProduct.inStock !== false} 
+                    onCheckedChange={val => setEditingProduct({...editingProduct, inStock: val})} 
+                  />
+                </div>
+
+                <div className="flex items-center justify-between p-2 bg-background rounded-lg border">
+                  <div className="flex flex-col gap-0.5">
+                    <Label className="font-bold">Featured Product</Label>
+                    <span className="text-[10px] text-muted-foreground">Show in Hero & Offers</span>
+                  </div>
+                  <Switch 
+                    checked={!!editingProduct.isFeatured} 
+                    onCheckedChange={val => setEditingProduct({...editingProduct, isFeatured: val})} 
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2 p-2 bg-background rounded-lg border">
+                  <div className="flex justify-between items-center">
+                    <Label className="font-bold">Discount: {editingProduct.discountPercent || 0}%</Label>
+                    {(editingProduct.discountPercent || 0) > 0 && (
+                      <Badge className="bg-red-500 text-white text-[10px]">SALE</Badge>
+                    )}
+                  </div>
+                  <Slider 
+                    value={[editingProduct.discountPercent || 0]} 
+                    min={0} 
+                    max={100} 
+                    step={1} 
+                    onValueChange={val => setEditingProduct({...editingProduct, discountPercent: val[0]})} 
+                  />
                 </div>
               </div>
 
