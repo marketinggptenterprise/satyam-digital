@@ -6,10 +6,11 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { useAuth } from "../context/AuthContext";
-import { LogIn, UserPlus } from "lucide-react";
+import { LogIn, UserPlus, Eye, EyeOff } from "lucide-react";
 
 export const LoginDialog = ({ children }: { children: React.ReactNode }) => {
   const [isLogin, setIsLogin] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -24,6 +25,10 @@ export const LoginDialog = ({ children }: { children: React.ReactNode }) => {
       await signUp(email, password);
     }
     setIsLoading(false);
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -58,14 +63,28 @@ export const LoginDialog = ({ children }: { children: React.ReactNode }) => {
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input 
-                id="password" 
-                type="password" 
-                placeholder="••••••••" 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <div className="relative">
+                <Input 
+                  id="password" 
+                  type={showPassword ? "text" : "password"} 
+                  placeholder="••••••••" 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="pr-10"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary transition-colors"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
             </div>
             <Button type="submit" className="w-full gap-2 h-11 font-bold" disabled={isLoading}>
               {isLogin ? <LogIn className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
@@ -80,7 +99,10 @@ export const LoginDialog = ({ children }: { children: React.ReactNode }) => {
             <button 
               type="button"
               className="text-primary font-bold hover:underline"
-              onClick={() => setIsLogin(!isLogin)}
+              onClick={() => {
+                setIsLogin(!isLogin);
+                setShowPassword(false); // Reset visibility when switching modes
+              }}
             >
               {isLogin ? 'Sign Up Now' : 'Sign In Instead'}
             </button>
