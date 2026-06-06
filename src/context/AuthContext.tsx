@@ -50,7 +50,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signUp = async (email: string, password: string) => {
     try {
       const { error } = await supabase.auth.signUp({ email, password });
-      if (error) throw error;
+      if (error) {
+        if (error.message.includes('rate limit')) {
+          showError('Rate limit exceeded. Please increase the "Signups" limit in your Supabase Dashboard > Settings > Authentication.');
+        } else {
+          throw error;
+        }
+        return;
+      }
       showSuccess('Account created successfully!');
     } catch (error: any) {
       showError(error.message || 'Error creating account');
