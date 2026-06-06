@@ -7,7 +7,8 @@ import { ProductCard } from '../components/ProductCard';
 import { HeroSlider } from '../components/HeroSlider';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
-import { Smartphone, Tv, Laptop, Watch, Speaker, Refrigerator, X, Search } from 'lucide-react';
+import { Smartphone, Tv, Laptop, Watch, Speaker, Refrigerator, X } from 'lucide-react';
+import { Input } from '../components/ui/input'; // Using Input instead of Search
 
 const Index = () => {
   const { products, categories, brands, banners } = useStore();
@@ -120,7 +121,7 @@ const Index = () => {
         ) : (
           <div className="bg-white rounded-2xl p-20 text-center shadow-sm">
             <div className="h-20 w-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-              <Search className="h-10 w-10 text-muted-foreground" />
+              <Input className="h-10 w-10 text-muted-foreground" placeholder="Search..." />
             </div>
             <p className="text-xl font-bold text-gray-800">No products found</p>
             <p className="text-muted-foreground mt-2">Try adjusting your search or filters to find what you're looking for.</p>
