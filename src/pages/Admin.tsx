@@ -272,7 +272,7 @@ const Admin = () => {
                   </div>
 
                   {/* Stock, Featured, and Discount Controls */}
-                  <div className="space-y-4 md:col-span-2 border p-4 rounded-xl bg-muted/10 grid md:grid-cols-3 gap-4 items-stretch">
+                  <div className="md:col-span-2 border p-4 rounded-xl bg-muted/10 grid md:grid-cols-3 gap-4 items-stretch">
                     <div className="flex items-center justify-between p-3 bg-background rounded-lg border min-h-[72px]">
                       <div className="flex flex-col gap-0.5">
                         <Label className="font-bold">In Stock</Label>
@@ -673,7 +673,7 @@ const Admin = () => {
               </div>
 
               {/* Edit Stock, Featured, and Discount Controls */}
-              <div className="space-y-4 border p-4 rounded-xl bg-muted/10 grid md:grid-cols-3 gap-4 items-stretch">
+              <div className="border p-4 rounded-xl bg-muted/10 grid md:grid-cols-3 gap-4 items-stretch">
                 <div className="flex items-center justify-between p-3 bg-background rounded-lg border min-h-[72px]">
                   <div className="flex flex-col gap-0.5">
                     <Label className="font-bold">In Stock</Label>
