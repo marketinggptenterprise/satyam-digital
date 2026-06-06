@@ -84,7 +84,7 @@ export function useStore() {
         ]);
 
         if (pErr || cErr || bErr || banErr) {
-          console.warn("Supabase tables might not be created yet. Falling back to local storage.");
+          console.warn("Supabase tables might not be created yet or query failed:", pErr, cErr, bErr, banErr);
           return;
         }
 
@@ -119,7 +119,7 @@ export function useStore() {
         if (error) throw error;
       } catch (err) {
         console.error("Supabase insert error:", err);
-        showError("Failed to sync product to cloud database.");
+        showError(`Failed to sync product: ${err instanceof Error ? err.message : String(err)}`);
       }
     }
   };
@@ -137,7 +137,7 @@ export function useStore() {
         if (error) throw error;
       } catch (err) {
         console.error("Supabase update error:", err);
-        showError("Failed to update product in cloud database.");
+        showError(`Failed to update product: ${err instanceof Error ? err.message : String(err)}`);
       }
     }
   };
@@ -152,7 +152,7 @@ export function useStore() {
         if (error) throw error;
       } catch (err) {
         console.error("Supabase delete error:", err);
-        showError("Failed to delete product from cloud database.");
+        showError(`Failed to delete product: ${err instanceof Error ? err.message : String(err)}`);
       }
     }
   };
@@ -169,6 +169,7 @@ export function useStore() {
         if (error) throw error;
       } catch (err) {
         console.error("Supabase category insert error:", err);
+        showError(`Failed to add category: ${err instanceof Error ? err.message : String(err)}`);
       }
     }
   };
@@ -183,7 +184,7 @@ export function useStore() {
         if (error) throw error;
       } catch (err) {
         console.error("Supabase category delete error:", err);
-        showError("Failed to delete category from cloud database.");
+        showError(`Failed to delete category: ${err instanceof Error ? err.message : String(err)}`);
       }
     }
   };
@@ -200,6 +201,7 @@ export function useStore() {
         if (error) throw error;
       } catch (err) {
         console.error("Supabase brand insert error:", err);
+        showError(`Failed to add brand: ${err instanceof Error ? err.message : String(err)}`);
       }
     }
   };
@@ -214,7 +216,7 @@ export function useStore() {
         if (error) throw error;
       } catch (err) {
         console.error("Supabase brand delete error:", err);
-        showError("Failed to delete brand from cloud database.");
+        showError(`Failed to delete brand: ${err instanceof Error ? err.message : String(err)}`);
       }
     }
   };
@@ -231,6 +233,7 @@ export function useStore() {
         if (error) throw error;
       } catch (err) {
         console.error("Supabase banner insert error:", err);
+        showError(`Failed to add banner: ${err instanceof Error ? err.message : String(err)}`);
       }
     }
   };
@@ -248,7 +251,7 @@ export function useStore() {
         if (error) throw error;
       } catch (err) {
         console.error("Supabase banner update error:", err);
-        showError("Failed to update banner in cloud database.");
+        showError(`Failed to update banner: ${err instanceof Error ? err.message : String(err)}`);
       }
     }
   };
@@ -263,6 +266,7 @@ export function useStore() {
         if (error) throw error;
       } catch (err) {
         console.error("Supabase banner delete error:", err);
+        showError(`Failed to delete banner: ${err instanceof Error ? err.message : String(err)}`);
       }
     }
   };
