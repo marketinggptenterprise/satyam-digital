@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { StoreData, Product, Category, Brand, Banner } from '../types/store';
+import { StoreData, Product, Category, Brand, Banner, Order, OrderStatus } from '../types/store';
 
-const STORAGE_KEY = 'satyam_digital_store_data_v2';
+const STORAGE_KEY = 'satyam_digital_store_data_v3';
 
 const initialData: StoreData = {
   products: [
@@ -52,6 +52,26 @@ const initialData: StoreData = {
       image: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&q=80&w=800',
       link: '#'
     }
+  ],
+  orders: [
+    { 
+      id: 'ORD-7281', 
+      customerEmail: 'admin@example.com', 
+      customerName: 'John Doe', 
+      date: '2024-03-15', 
+      total: 129900, 
+      status: 'Delivered', 
+      items: 'iPhone 15 Pro' 
+    },
+    { 
+      id: 'ORD-6542', 
+      customerEmail: 'user@example.com', 
+      customerName: 'Jane Smith', 
+      date: '2024-02-28', 
+      total: 2450, 
+      status: 'Processing', 
+      items: 'Samsung Case, Cable' 
+    }
   ]
 };
 
@@ -93,6 +113,15 @@ export function useStore() {
     setData(prev => ({ ...prev, banners: prev.banners.filter(b => b.id !== id) }));
   };
 
+  const updateOrderStatus = (orderId: string, status: OrderStatus) => {
+    setData(prev => ({
+      ...prev,
+      orders: prev.orders.map(order => 
+        order.id === orderId ? { ...order, status } : order
+      )
+    }));
+  };
+
   return {
     ...data,
     addProduct,
@@ -100,6 +129,7 @@ export function useStore() {
     addCategory,
     addBrand,
     addBanner,
-    deleteBanner
+    deleteBanner,
+    updateOrderStatus
   };
 }

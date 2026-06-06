@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Navbar } from '../components/Navbar';
 import { useAuth } from '../context/AuthContext';
+import { useStore } from '../hooks/useStore';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -13,13 +14,11 @@ import { Package, MapPin, User, CreditCard, ChevronRight, Clock } from 'lucide-r
 
 const Profile = () => {
   const { user } = useAuth();
+  const { orders } = useStore();
   const [isEditing, setIsEditing] = useState(false);
 
-  // Mock order history
-  const orders = [
-    { id: 'ORD-7281', date: '2024-03-15', total: 129900, status: 'Delivered', items: 1 },
-    { id: 'ORD-6542', date: '2024-02-28', total: 2450, status: 'Processing', items: 2 }
-  ];
+  // Filter orders for the current user
+  const userOrders = orders.filter(order => order.customerEmail === user?.email);
 
   if (!user) return <div className="min-h-screen flex items-center justify-center">Please login to view your profile.</div>;
 
@@ -42,7 +41,7 @@ const Profile = () => {
                 <p className="text-sm text-muted-foreground">{user.email}</p>
                 <div className="mt-6 flex justify-center gap-4">
                   <div className="text-center">
-                    <p className="text-lg font-bold">2</p>
+                    <p className="text-lg font-bold">{userOrders.length}</p>
                     <p className="text-[10px] text-muted-foreground uppercase font-bold">Orders</p>
                   </div>
                   <div className="w-px h-8 bg-border"></div>
@@ -82,7 +81,7 @@ const Profile = () => {
               </TabsList>
 
               <TabsContent value="orders" className="space-y-4">
-                {orders.map((order) => (
+                {userOrders.length > 0 ? userOrders.map((order) => (
                   <Card key={order.id} className="border-none shadow-sm hover:shadow-md transition-shadow">
                     <CardContent className="p-6">
                       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -99,7 +98,10 @@ const Profile = () => {
                         </div>
                         <div className="text-right">
                           <p className="font-black text-primary">₹{order.total.toLocaleString('en-IN')}</p>
-                          <Badge variant={order.status === 'Delivered' ? 'default' : 'secondary'} className="mt-1">
+                          <Badge 
+                            variant={order.status === 'Delivered' ? 'default' : order.status === 'Cancelled' ? 'destructive' : 'secondary'} 
+                            className="mt-1"
+                          >
                             {order.status}
                           </Badge>
                         </div>
@@ -109,7 +111,11 @@ const Profile = () => {
                       </div>
                     </CardContent>
                   </Card>
-                ))}
+                )) : (
+                  <Card className="border-none shadow-sm p-12 text-center">
+                    <p className="text-muted-foreground">You haven't placed any orders yet.</p>
+                  </Card>
+                )}
               </TabsContent>
 
               <TabsContent value="addresses">

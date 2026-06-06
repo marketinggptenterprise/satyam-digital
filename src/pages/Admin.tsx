@@ -15,9 +15,10 @@ import { Badge } from '../components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
 import { Plus, Trash2, Package, Tag, Briefcase, LogOut, Image as ImageIcon, ShoppingBag, ExternalLink } from 'lucide-react';
 import { showSuccess } from '../utils/toast';
+import { OrderStatus } from '../types/store';
 
 const Admin = () => {
-  const { products, categories, brands, banners, addProduct, deleteProduct, addCategory, addBrand, addBanner, deleteBanner } = useStore();
+  const { products, categories, brands, banners, orders, addProduct, deleteProduct, addCategory, addBrand, addBanner, deleteBanner, updateOrderStatus } = useStore();
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -31,12 +32,6 @@ const Admin = () => {
     localStorage.removeItem('admin_auth');
     navigate('/admin/login');
   };
-
-  // Mock orders for admin
-  const [orders] = useState([
-    { id: 'ORD-7281', customer: 'John Doe', date: '2024-03-15', total: 129900, status: 'Delivered', items: 'iPhone 15 Pro' },
-    { id: 'ORD-6542', customer: 'Jane Smith', date: '2024-02-28', total: 2450, status: 'Processing', items: 'Samsung Case, Cable' }
-  ]);
 
   const [newProduct, setNewProduct] = useState({
     name: '',
@@ -73,6 +68,11 @@ const Admin = () => {
     addBanner(newBanner);
     setNewBanner({ title: '', subtitle: '', badge: '', image: '', link: '#' });
     showSuccess('Banner added successfully!');
+  };
+
+  const handleStatusChange = (orderId: string, status: OrderStatus) => {
+    updateOrderStatus(orderId, status);
+    showSuccess(`Order ${orderId} updated to ${status}`);
   };
 
   return (
@@ -240,14 +240,25 @@ const Admin = () => {
                     {orders.map((order) => (
                       <TableRow key={order.id}>
                         <TableCell className="font-bold">{order.id}</TableCell>
-                        <TableCell>{order.customer}</TableCell>
+                        <TableCell>{order.customerName}</TableCell>
                         <TableCell>{order.date}</TableCell>
                         <TableCell className="max-w-[200px] truncate">{order.items}</TableCell>
                         <TableCell>₹{order.total.toLocaleString('en-IN')}</TableCell>
                         <TableCell>
-                          <Badge variant={order.status === 'Delivered' ? 'default' : 'secondary'}>
-                            {order.status}
-                          </Badge>
+                          <Select 
+                            defaultValue={order.status} 
+                            onValueChange={(val) => handleStatusChange(order.id, val as OrderStatus)}
+                          >
+                            <SelectTrigger className="w-[130px] h-8 text-xs">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Processing">Processing</SelectItem>
+                              <SelectItem value="Shipped">Shipped</SelectItem>
+                              <SelectItem value="Delivered">Delivered</SelectItem>
+                              <SelectItem value="Cancelled">Cancelled</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </TableCell>
                         <TableCell className="text-right">
                           <Button variant="ghost" size="icon">
