@@ -206,9 +206,16 @@ const Index = () => {
           <div>
             <h4 className="font-bold mb-4 text-white dark:text-zinc-950">Quick Links</h4>
             <ul className="text-sm text-white/70 dark:text-zinc-950/80 space-y-2">
-              {['About Us', 'Contact Us', 'Store Locator', 'Careers'].map((link, idx) => (
-                <li key={idx} className="relative w-fit hover:text-secondary dark:hover:text-zinc-800 hover:translate-x-1 transition-all duration-200 cursor-pointer py-1 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-secondary dark:after:bg-zinc-800 after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100">
-                  {link}
+              {categories.map((cat) => (
+                <li 
+                  key={cat.id} 
+                  onClick={() => {
+                    setSearchParams({ cat: cat.id });
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="relative w-fit hover:text-secondary dark:hover:text-zinc-800 hover:translate-x-1 transition-all duration-200 cursor-pointer py-1 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-secondary dark:after:bg-zinc-800 after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100"
+                >
+                  {cat.name}
                 </li>
               ))}
             </ul>
