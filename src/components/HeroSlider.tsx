@@ -26,28 +26,37 @@ export const HeroSlider = ({ banners }: HeroSliderProps) => {
         <div className="flex">
           {banners.map((banner) => (
             <div key={banner.id} className="flex-[0_0_100%] min-w-0 relative">
-              <div className="relative bg-gradient-to-r from-primary/90 to-blue-950/90 backdrop-blur-md h-[300px] md:h-[400px] flex items-center overflow-hidden">
-                <div className="px-8 md:px-16 max-w-xl relative z-10">
-                  <Badge className="bg-secondary text-primary dark:bg-zinc-900 dark:text-yellow-400 font-bold mb-4 hover:bg-secondary hover:text-primary rounded-full px-3 py-1">{banner.badge}</Badge>
-                  <h1 className="text-3xl md:text-6xl font-black text-white dark:text-zinc-950 mb-4 leading-tight">
-                    {banner.title.split(' ').map((word, i) => (
-                      <span key={i} className={i === 2 ? "text-secondary dark:text-blue-900" : ""}>{word} </span>
-                    ))}
+              <div className="relative bg-gradient-to-r from-primary/95 to-blue-900/95 backdrop-blur-md h-[350px] md:h-[420px] flex flex-col md:flex-row items-center overflow-hidden">
+                
+                {/* Left Content Side */}
+                <div className="flex-1 px-6 py-8 md:py-0 md:px-16 max-w-xl relative z-10 flex flex-col justify-center h-full">
+                  <Badge className="bg-secondary text-primary dark:bg-zinc-900 dark:text-yellow-400 font-bold mb-4 hover:bg-secondary hover:text-primary rounded-full px-3 py-1 w-fit">
+                    {banner.badge}
+                  </Badge>
+                  <h1 className="text-2xl md:text-5xl font-black text-white mb-3 leading-tight">
+                    {banner.title}
                   </h1>
-                  <p className="text-white/80 dark:text-black font-medium text-sm md:text-lg mb-8 line-clamp-2">
+                  <p className="text-white/80 font-medium text-xs md:text-base mb-6 line-clamp-2">
                     {banner.subtitle}
                   </p>
-                  <Button asChild className="bg-secondary text-primary dark:bg-zinc-900 dark:text-yellow-400 hover:bg-secondary/90 hover:text-primary font-black px-8 py-6 rounded-full hover:scale-105 transition-all text-lg shadow-lg">
+                  <Button asChild className="bg-secondary text-primary hover:bg-secondary/90 hover:text-primary font-black px-6 py-5 md:px-8 md:py-6 rounded-full hover:scale-105 transition-all text-sm md:text-lg shadow-lg w-fit">
                     <a href="tel:+919932026227">SHOP NOW</a>
                   </Button>
                 </div>
-                <div className="absolute right-0 bottom-0 w-full md:w-1/2 h-full opacity-30 md:opacity-100">
-                  <img 
-                    src={banner.image} 
-                    alt={banner.title} 
-                    className="h-full w-full object-cover"
-                  />
+
+                {/* Right Image Side (Contained, PNG-style format) */}
+                <div className="w-full md:w-1/2 h-[180px] md:h-full flex items-center justify-center p-4 md:p-10 relative z-10">
+                  <div className="w-full h-full max-w-[280px] md:max-w-[400px] max-h-[160px] md:max-h-[320px] bg-white/10 dark:bg-white/5 backdrop-blur-md rounded-2xl p-4 md:p-6 border border-white/10 flex items-center justify-center shadow-inner hover:scale-105 transition-transform duration-500">
+                    <img 
+                      src={banner.image} 
+                      alt={banner.title} 
+                      className="max-h-full max-w-full object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)]"
+                    />
+                  </div>
                 </div>
+
+                {/* Decorative Background Glow */}
+                <div className="absolute -right-10 -bottom-10 w-72 h-72 bg-secondary/20 rounded-full blur-3xl pointer-events-none" />
               </div>
             </div>
           ))}
