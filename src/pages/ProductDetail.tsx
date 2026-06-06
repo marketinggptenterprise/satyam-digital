@@ -9,6 +9,7 @@ import { BreadcrumbNav } from '../components/BreadcrumbNav';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
+import { Label } from '@/components/ui/label'; // Added missing import
 import { Plus, Minus, ShoppingCart, Star, MessageSquare, Phone } from 'lucide-react';
 import { showError, showSuccess } from '../utils/toast';
 import useEmblaCarousel from 'embla-carousel-react';
