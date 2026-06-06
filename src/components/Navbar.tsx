@@ -2,26 +2,14 @@
 
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Settings, Search, MapPin, User as UserIcon, ShoppingCart, Menu, LogOut, UserCircle, Package } from 'lucide-react';
+import { Settings, Search, MapPin, ShoppingCart, Menu } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { CartDrawer } from './CartDrawer';
-import { LoginDialog } from './LoginDialog';
 import { useCart } from '../hooks/useCart';
-import { useAuth } from '../context/AuthContext';
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuLabel, 
-  DropdownMenuSeparator, 
-  DropdownMenuTrigger 
-} from './ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 export const Navbar = () => {
   const { totalItems } = useCart();
-  const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
@@ -79,51 +67,6 @@ export const Navbar = () => {
         </form>
 
         <div className="flex items-center gap-6 shrink-0">
-          {user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <div className="flex flex-col items-center cursor-pointer group">
-                  <Avatar className="h-8 w-8 border-2 border-primary/20">
-                    <AvatarImage src={user.user_metadata.avatar_url} />
-                    <AvatarFallback className="bg-primary/10 text-primary font-bold">
-                      {user.email?.charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="text-[10px] font-medium text-gray-500 group-hover:text-primary mt-1">Profile</span>
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>
-                  <div className="flex flex-col">
-                    <span className="font-bold">{user.user_metadata.full_name || user.email?.split('@')[0]}</span>
-                    <span className="text-xs text-muted-foreground truncate">{user.email}</span>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/profile')}>
-                  <UserCircle className="mr-2 h-4 w-4" />
-                  <span>My Profile</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/profile?tab=orders')}>
-                  <Package className="mr-2 h-4 w-4" />
-                  <span>My Orders</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive" onClick={signOut}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Logout</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <LoginDialog>
-              <div className="flex flex-col items-center cursor-pointer group">
-                <UserIcon className="h-6 w-6 text-gray-600 group-hover:text-primary" />
-                <span className="text-[10px] font-medium text-gray-500 group-hover:text-primary">Login</span>
-              </div>
-            </LoginDialog>
-          )}
-          
           <CartDrawer>
             <div className="flex flex-col items-center cursor-pointer group relative">
               <ShoppingCart className="h-6 w-6 text-gray-600 group-hover:text-primary" />
