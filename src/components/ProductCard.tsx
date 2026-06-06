@@ -38,7 +38,7 @@ export const ProductCard = ({ product, category, brand }: ProductCardProps) => {
   };
 
   return (
-    <Card className="group relative bg-white border-none shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 rounded-xl overflow-hidden flex flex-col h-full">
+    <Card className="group relative bg-white dark:bg-zinc-900 border-none shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 rounded-xl overflow-hidden flex flex-col h-full">
       <div className="absolute top-2 left-2 z-10">
         <Badge className="bg-secondary text-primary font-bold text-[10px] border-none">
           OFFER
@@ -46,7 +46,7 @@ export const ProductCard = ({ product, category, brand }: ProductCardProps) => {
       </div>
       
       {/* Image Carousel */}
-      <div className="aspect-square p-4 overflow-hidden bg-white relative flex items-center justify-center shrink-0">
+      <div className="aspect-square p-4 overflow-hidden bg-white dark:bg-white relative flex items-center justify-center shrink-0">
         <img 
           src={imagesList[currentImageIndex]} 
           alt={product.name} 
@@ -94,7 +94,7 @@ export const ProductCard = ({ product, category, brand }: ProductCardProps) => {
             {brand?.name}
           </p>
           
-          <h3 className="text-sm font-bold text-gray-800 line-clamp-2 h-10 mb-2 group-hover:text-primary transition-colors">
+          <h3 className="text-sm font-bold text-gray-800 dark:text-gray-100 line-clamp-2 h-10 mb-2 group-hover:text-primary transition-colors">
             {product.name}
           </h3>
         </div>

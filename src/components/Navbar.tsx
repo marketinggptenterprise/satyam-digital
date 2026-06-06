@@ -2,12 +2,13 @@
 
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Settings, Search, MapPin, ShoppingCart, Menu, X, Smartphone, Tv, Laptop, Watch, Speaker, Refrigerator } from 'lucide-react';
+import { Settings, Search, MapPin, ShoppingCart, Menu, X, Smartphone, Tv, Laptop, Watch, Speaker, Refrigerator, Sun, Moon } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { CartDrawer } from './CartDrawer';
 import { useCart } from '../hooks/useCart';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
+import { useTheme } from 'next-themes';
 
 export const Navbar = () => {
   const { totalItems } = useCart();
@@ -16,6 +17,7 @@ export const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const [logoError, setLogoError] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +38,7 @@ export const Navbar = () => {
   ];
 
   return (
-    <header className="w-full bg-white shadow-sm sticky top-0 z-50">
+    <header className="w-full bg-white dark:bg-zinc-900 shadow-sm sticky top-0 z-50 transition-colors duration-300">
       {/* Top Bar */}
       <div className="bg-primary text-white py-2 text-xs">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
@@ -62,10 +64,10 @@ export const Navbar = () => {
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="lg:hidden h-10 w-10 hover:bg-primary/5 transition-colors">
-                <Menu className="h-6 w-6 text-gray-700" />
+                <Menu className="h-6 w-6 text-gray-700 dark:text-gray-200" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-[300px] p-0">
+            <SheetContent side="left" className="w-[300px] p-0 dark:bg-zinc-900">
               <SheetHeader className="p-6 border-b bg-primary text-white">
                 <SheetTitle className="text-left text-white flex items-center gap-2">
                   <span className="font-black tracking-wider">SATYAM DIGITAL</span>
@@ -79,7 +81,7 @@ export const Navbar = () => {
                       <Link
                         key={cat.id}
                         to={`/?cat=${cat.id}`}
-                        className="flex items-center gap-3 p-3 rounded-xl hover:bg-primary/5 hover:translate-x-1 transition-all text-gray-700 font-semibold"
+                        className="flex items-center gap-3 p-3 rounded-xl hover:bg-primary/5 hover:translate-x-1 transition-all text-gray-700 dark:text-gray-200 font-semibold"
                       >
                         <cat.icon className="h-5 w-5 text-primary" />
                         {cat.name}
@@ -90,7 +92,7 @@ export const Navbar = () => {
                 <div className="border-t pt-6 space-y-2">
                   <Link
                     to="/admin"
-                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-primary/5 hover:translate-x-1 transition-all text-gray-700 font-semibold"
+                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-primary/5 hover:translate-x-1 transition-all text-gray-700 dark:text-gray-200 font-semibold"
                   >
                     <Settings className="h-5 w-5 text-primary" />
                     Admin Dashboard
@@ -111,7 +113,7 @@ export const Navbar = () => {
               <img
                 src="/logo.png"
                 alt="Satyam Digital"
-                className="h-10 md:h-16 w-auto object-contain"
+                className="h-10 md:h-16 w-auto object-contain dark:brightness-110"
                 onError={() => setLogoError(true)}
               />
             )}
@@ -122,7 +124,7 @@ export const Navbar = () => {
         <form onSubmit={handleSearch} className="flex-1 max-w-2xl relative hidden md:block group">
           <Input
             placeholder="Search for Mobiles, Accessories, TV & more..."
-            className="w-full pl-4 pr-12 h-11 border-2 border-primary/20 focus-visible:border-primary rounded-full bg-gray-50/50 transition-all duration-300 group-hover:border-primary/40"
+            className="w-full pl-4 pr-12 h-11 border-2 border-primary/20 focus-visible:border-primary rounded-full bg-gray-50/50 dark:bg-zinc-800 dark:border-zinc-700 dark:text-white transition-all duration-300 group-hover:border-primary/40"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -133,6 +135,17 @@ export const Navbar = () => {
 
         {/* Actions */}
         <div className="flex items-center gap-2 md:gap-4 shrink-0">
+          {/* Dark Mode Toggle */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-10 w-10 hover:bg-primary/5 transition-colors rounded-full"
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          >
+            <Sun className="h-5 w-5 text-gray-700 dark:text-gray-200 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <Moon className="absolute h-5 w-5 text-gray-700 dark:text-gray-200 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          </Button>
+
           {/* Mobile Search Toggle */}
           <Button
             variant="ghost"
@@ -140,7 +153,7 @@ export const Navbar = () => {
             className="md:hidden h-10 w-10 hover:bg-primary/5 transition-colors"
             onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
           >
-            <Search className="h-5 w-5 text-gray-700" />
+            <Search className="h-5 w-5 text-gray-700 dark:text-gray-200" />
           </Button>
 
           <div className="hover:scale-105 transition-transform duration-200">
@@ -151,11 +164,11 @@ export const Navbar = () => {
 
       {/* Mobile Search Bar (Expandable) */}
       {isMobileSearchOpen && (
-        <div className="border-t p-3 bg-gray-50 md:hidden animate-in slide-in-from-top duration-200">
+        <div className="border-t p-3 bg-gray-50 dark:bg-zinc-800 md:hidden animate-in slide-in-from-top duration-200">
           <form onSubmit={handleSearch} className="relative">
             <Input
               placeholder="Search products..."
-              className="w-full pl-4 pr-12 h-10 border-2 border-primary/20 focus-visible:border-primary rounded-full bg-white"
+              className="w-full pl-4 pr-12 h-10 border-2 border-primary/20 focus-visible:border-primary rounded-full bg-white dark:bg-zinc-900 dark:border-zinc-700 dark:text-white"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               autoFocus
@@ -168,12 +181,12 @@ export const Navbar = () => {
       )}
 
       {/* Desktop Category Bar */}
-      <div className="border-t bg-white hidden lg:block">
+      <div className="border-t bg-white dark:bg-zinc-900 hidden lg:block transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 flex items-center gap-8 py-2">
           <Button variant="ghost" className="font-bold text-primary gap-2 hover:bg-primary/5 transition-colors">
             <Menu className="h-4 w-4" /> Shop By Category
           </Button>
-          <nav className="flex items-center gap-6 text-sm font-semibold text-gray-700">
+          <nav className="flex items-center gap-6 text-sm font-semibold text-gray-700 dark:text-gray-200">
             {categoriesList.map((cat) => (
               <Link key={cat.id} to={`/?cat=${cat.id}`} className="hover:text-primary hover:scale-105 transition-all duration-200">
                 {cat.name}

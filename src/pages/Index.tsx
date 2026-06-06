@@ -40,7 +40,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f4f4f4]">
+    <div className="min-h-screen bg-[#f4f4f4] dark:bg-zinc-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
       <Navbar />
       
       {/* Hero Slider - Only show on home page without filters */}
@@ -53,12 +53,12 @@ const Index = () => {
             <div 
               key={link.id}
               onClick={() => setSearchParams({ cat: link.id })}
-              className={`flex flex-col items-center p-4 rounded-2xl bg-white shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 border-2 ${selectedCategory === link.id ? 'border-primary' : 'border-transparent'}`}
+              className={`flex flex-col items-center p-4 rounded-2xl bg-white dark:bg-zinc-900 shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 border-2 ${selectedCategory === link.id ? 'border-primary' : 'border-transparent'}`}
             >
               <div className="h-12 w-12 rounded-full bg-primary/5 flex items-center justify-center mb-2 transition-transform duration-300 group-hover:scale-110">
                 <link.icon className="h-6 w-6 text-primary" />
               </div>
-              <span className="text-xs font-bold text-gray-700">{link.name}</span>
+              <span className="text-xs font-bold text-gray-700 dark:text-gray-300">{link.name}</span>
             </div>
           ))}
         </div>
@@ -67,7 +67,7 @@ const Index = () => {
       <main className="container py-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
           <div>
-            <h2 className="text-2xl font-black text-gray-800 flex items-center gap-2">
+            <h2 className="text-2xl font-black text-gray-800 dark:text-white flex items-center gap-2">
               <span className="w-2 h-8 bg-primary rounded-full"></span>
               {searchQuery ? `Search results for "${searchQuery}"` : selectedCategory ? `${categories.find(c => c.id === selectedCategory)?.name || 'Products'}` : 'Trending Products'}
             </h2>
@@ -119,11 +119,11 @@ const Index = () => {
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-2xl p-20 text-center shadow-sm">
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl p-20 text-center shadow-sm">
             <div className="h-20 w-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
               <Input className="h-10 w-10 text-muted-foreground" placeholder="Search..." />
             </div>
-            <p className="text-xl font-bold text-gray-800">No products found</p>
+            <p className="text-xl font-bold text-gray-800 dark:text-white">No products found</p>
             <p className="text-muted-foreground mt-2">Try adjusting your search or filters to find what you're looking for.</p>
             <Button onClick={clearFilters} className="mt-6 bg-primary hover:scale-105 transition-transform duration-200">View All Products</Button>
           </div>
@@ -131,7 +131,7 @@ const Index = () => {
       </main>
 
       {/* Features Section */}
-      <section className="bg-white border-t mt-12 py-12">
+      <section className="bg-white dark:bg-zinc-900 border-t dark:border-zinc-800 mt-12 py-12 transition-colors duration-300">
         <div className="container grid grid-cols-2 md:grid-cols-4 gap-8">
           {[
             { title: 'Free Delivery', desc: 'On orders above ₹999' },
@@ -141,7 +141,7 @@ const Index = () => {
           ].map((feat, i) => (
             <div key={i} className="text-center group cursor-pointer">
               <h4 className="font-bold text-primary group-hover:scale-105 transition-transform duration-300">{feat.title}</h4>
-              <p className="text-xs text-gray-500">{feat.desc}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{feat.desc}</p>
             </div>
           ))}
         </div>
