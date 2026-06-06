@@ -12,11 +12,14 @@ export interface Product {
   id: string;
   name: string;
   description: string;
-  price: number;
+  price: number; // Original Price (MRP)
   categoryId: string;
   brandId: string;
   image: string;
   images?: string[]; // Support up to 5 images
+  inStock?: boolean;
+  isFeatured?: boolean;
+  discountPercent?: number;
 }
 
 export interface Banner {
