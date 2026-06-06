@@ -1,5 +1,8 @@
-import { Link } from 'react-router-dom';
-import { Settings, Search, MapPin, User as UserIcon, ShoppingCart, Menu, LogOut } from 'lucide-react';
+"use client";
+
+import { useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Settings, Search, MapPin, User as UserIcon, ShoppingCart, Menu, LogOut, UserCircle } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { CartDrawer } from './CartDrawer';
@@ -19,6 +22,18 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 export const Navbar = () => {
   const { totalItems } = useCart();
   const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/?q=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      navigate('/');
+    }
+  };
 
   return (
     <header className="w-full bg-white shadow-sm sticky top-0 z-50">
@@ -51,15 +66,17 @@ export const Navbar = () => {
           </div>
         </Link>
 
-        <div className="flex-1 relative hidden md:block">
+        <form onSubmit={handleSearch} className="flex-1 relative hidden md:block">
           <Input 
             placeholder="Search for Mobiles, Accessories, TV & more..." 
             className="w-full pl-4 pr-12 h-11 border-2 border-primary/20 focus-visible:border-primary rounded-full"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <Button size="icon" className="absolute right-1 top-1 h-9 w-9 rounded-full bg-primary hover:bg-primary/90">
+          <Button type="submit" size="icon" className="absolute right-1 top-1 h-9 w-9 rounded-full bg-primary hover:bg-primary/90">
             <Search className="h-4 w-4 text-white" />
           </Button>
-        </div>
+        </form>
 
         <div className="flex items-center gap-6 shrink-0">
           {user ? (
@@ -83,8 +100,14 @@ export const Navbar = () => {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer">My Orders</DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">Wishlist</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/profile')}>
+                  <UserCircle className="mr-2 h-4 w-4" />
+                  <span>My Profile</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/profile?tab=orders')}>
+                  <Package className="mr-2 h-4 w-4" />
+                  <span>My Orders</span>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive" onClick={signOut}>
                   <LogOut className="mr-2 h-4 w-4" />
@@ -122,12 +145,12 @@ export const Navbar = () => {
             <Menu className="h-4 w-4" /> Shop By Category
           </Button>
           <nav className="flex items-center gap-6 text-sm font-medium text-gray-700">
-            <Link to="/" className="hover:text-primary">Mobiles</Link>
-            <Link to="/" className="hover:text-primary">Laptops</Link>
-            <Link to="/" className="hover:text-primary">Smart TV</Link>
-            <Link to="/" className="hover:text-primary">Appliances</Link>
-            <Link to="/" className="hover:text-primary">Accessories</Link>
-            <Link to="/" className="text-red-600 font-bold">Offers</Link>
+            <Link to="/?cat=mobiles" className="hover:text-primary">Mobiles</Link>
+            <Link to="/?cat=laptops" className="hover:text-primary">Laptops</Link>
+            <Link to="/?cat=electronics" className="hover:text-primary">Smart TV</Link>
+            <Link to="/?cat=appliances" className="hover:text-primary">Appliances</Link>
+            <Link to="/?cat=audio" className="hover:text-primary">Accessories</Link>
+            <Link to="/?q=offer" className="text-red-600 font-bold">Offers</Link>
           </nav>
         </div>
       </div>

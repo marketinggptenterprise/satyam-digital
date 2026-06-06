@@ -9,10 +9,11 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Badge } from '../components/ui/badge';
-import { Plus, Trash2, Package, Tag, Briefcase, LogOut, Image as ImageIcon } from 'lucide-react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
+import { Plus, Trash2, Package, Tag, Briefcase, LogOut, Image as ImageIcon, ShoppingBag, ExternalLink } from 'lucide-react';
 import { showSuccess } from '../utils/toast';
 
 const Admin = () => {
@@ -30,6 +31,12 @@ const Admin = () => {
     localStorage.removeItem('admin_auth');
     navigate('/admin/login');
   };
+
+  // Mock orders for admin
+  const [orders] = useState([
+    { id: 'ORD-7281', customer: 'John Doe', date: '2024-03-15', total: 129900, status: 'Delivered', items: 'iPhone 15 Pro' },
+    { id: 'ORD-6542', customer: 'Jane Smith', date: '2024-02-28', total: 2450, status: 'Processing', items: 'Samsung Case, Cable' }
+  ]);
 
   const [newProduct, setNewProduct] = useState({
     name: '',
@@ -73,16 +80,22 @@ const Admin = () => {
       <Navbar />
       <main className="container py-8">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+            <p className="text-muted-foreground">Manage your store inventory and orders</p>
+          </div>
           <Button variant="outline" onClick={handleLogout} className="gap-2 text-destructive hover:text-destructive">
             <LogOut className="h-4 w-4" /> Logout
           </Button>
         </div>
 
         <Tabs defaultValue="products" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:w-[500px]">
+          <TabsList className="grid w-full grid-cols-5 lg:w-[650px]">
             <TabsTrigger value="products" className="gap-2">
               <Package className="h-4 w-4" /> Products
+            </TabsTrigger>
+            <TabsTrigger value="orders" className="gap-2">
+              <ShoppingBag className="h-4 w-4" /> Orders
             </TabsTrigger>
             <TabsTrigger value="banners" className="gap-2">
               <ImageIcon className="h-4 w-4" /> Banners
@@ -202,6 +215,51 @@ const Admin = () => {
                 </Card>
               ))}
             </div>
+          </TabsContent>
+
+          <TabsContent value="orders">
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Orders</CardTitle>
+                <CardDescription>Manage customer orders and fulfillment</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Order ID</TableHead>
+                      <TableHead>Customer</TableHead>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Items</TableHead>
+                      <TableHead>Total</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="text-right">Action</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {orders.map((order) => (
+                      <TableRow key={order.id}>
+                        <TableCell className="font-bold">{order.id}</TableCell>
+                        <TableCell>{order.customer}</TableCell>
+                        <TableCell>{order.date}</TableCell>
+                        <TableCell className="max-w-[200px] truncate">{order.items}</TableCell>
+                        <TableCell>₹{order.total.toLocaleString('en-IN')}</TableCell>
+                        <TableCell>
+                          <Badge variant={order.status === 'Delivered' ? 'default' : 'secondary'}>
+                            {order.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Button variant="ghost" size="icon">
+                            <ExternalLink className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="banners" className="space-y-6">

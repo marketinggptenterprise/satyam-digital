@@ -1,17 +1,28 @@
-import { useState } from 'react';
+"use client";
+
+import { useSearchParams } from 'react-router-dom';
 import { useStore } from '../hooks/useStore';
 import { Navbar } from '../components/Navbar';
 import { ProductCard } from '../components/ProductCard';
 import { HeroSlider } from '../components/HeroSlider';
 import { Badge } from '../components/ui/badge';
-import { Smartphone, Tv, Laptop, Watch, Speaker, Refrigerator } from 'lucide-react';
+import { Smartphone, Tv, Laptop, Watch, Speaker, Refrigerator, X } from 'lucide-react';
+import { Button } from '../components/ui/button';
 
 const Index = () => {
   const { products, categories, brands, banners } = useStore();
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  
+  const selectedCategory = searchParams.get('cat');
+  const searchQuery = searchParams.get('q');
 
   const filteredProducts = products.filter(p => {
-    return selectedCategory ? p.categoryId === selectedCategory : true;
+    const matchesCategory = selectedCategory ? p.categoryId === selectedCategory : true;
+    const matchesSearch = searchQuery 
+      ? p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        p.description.toLowerCase().includes(searchQuery.toLowerCase())
+      : true;
+    return matchesCategory && matchesSearch;
   });
 
   const quickLinks = [
@@ -23,12 +34,16 @@ const Index = () => {
     { id: 'appliances', name: 'Appliances', icon: Refrigerator },
   ];
 
+  const clearFilters = () => {
+    setSearchParams({});
+  };
+
   return (
     <div className="min-h-screen bg-[#f4f4f4]">
       <Navbar />
       
-      {/* Hero Slider */}
-      <HeroSlider banners={banners} />
+      {/* Hero Slider - Only show on home page without filters */}
+      {!selectedCategory && !searchQuery && <HeroSlider banners={banners} />}
 
       {/* Quick Category Links */}
       <section className="container py-8">
@@ -36,7 +51,7 @@ const Index = () => {
           {quickLinks.map((link) => (
             <div 
               key={link.id}
-              onClick={() => setSelectedCategory(link.id)}
+              onClick={() => setSearchParams({ cat: link.id })}
               className={`flex flex-col items-center p-4 rounded-2xl bg-white shadow-sm cursor-pointer hover:shadow-md transition-all border-2 ${selectedCategory === link.id ? 'border-primary' : 'border-transparent'}`}
             >
               <div className="h-12 w-12 rounded-full bg-primary/5 flex items-center justify-center mb-2">
@@ -49,16 +64,28 @@ const Index = () => {
       </section>
 
       <main className="container py-8">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-black text-gray-800 flex items-center gap-2">
-            <span className="w-2 h-8 bg-primary rounded-full"></span>
-            Trending Products
-          </h2>
-          <div className="flex gap-2">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+          <div>
+            <h2 className="text-2xl font-black text-gray-800 flex items-center gap-2">
+              <span className="w-2 h-8 bg-primary rounded-full"></span>
+              {searchQuery ? `Search results for "${searchQuery}"` : selectedCategory ? `${categories.find(c => c.id === selectedCategory)?.name || 'Products'}` : 'Trending Products'}
+            </h2>
+            {(selectedCategory || searchQuery) && (
+              <Button variant="link" onClick={clearFilters} className="p-0 h-auto text-xs text-muted-foreground gap-1 mt-1">
+                <X className="h-3 w-3" /> Clear all filters
+              </Button>
+            )}
+          </div>
+          
+          <div className="flex flex-wrap gap-2">
             <Badge 
-              variant={selectedCategory === null ? "default" : "outline"}
-              className="cursor-pointer"
-              onClick={() => setSelectedCategory(null)}
+              variant={!selectedCategory ? "default" : "outline"}
+              className="cursor-pointer px-4 py-1"
+              onClick={() => {
+                const params = new URLSearchParams(searchParams);
+                params.delete('cat');
+                setSearchParams(params);
+              }}
             >
               All
             </Badge>
@@ -66,8 +93,12 @@ const Index = () => {
               <Badge 
                 key={cat.id}
                 variant={selectedCategory === cat.id ? "default" : "outline"}
-                className="cursor-pointer"
-                onClick={() => setSelectedCategory(cat.id)}
+                className="cursor-pointer px-4 py-1"
+                onClick={() => {
+                  const params = new URLSearchParams(searchParams);
+                  params.set('cat', cat.id);
+                  setSearchParams(params);
+                }}
               >
                 {cat.name}
               </Badge>
@@ -88,7 +119,12 @@ const Index = () => {
           </div>
         ) : (
           <div className="bg-white rounded-2xl p-20 text-center shadow-sm">
-            <p className="text-xl text-muted-foreground">No products found in this category.</p>
+            <div className="h-20 w-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+              <Search className="h-10 w-10 text-muted-foreground" />
+            </div>
+            <p className="text-xl font-bold text-gray-800">No products found</p>
+            <p className="text-muted-foreground mt-2">Try adjusting your search or filters to find what you're looking for.</p>
+            <Button onClick={clearFilters} className="mt-6 bg-primary">View All Products</Button>
           </div>
         )}
       </main>
