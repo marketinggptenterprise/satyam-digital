@@ -272,8 +272,8 @@ const Admin = () => {
                   </div>
 
                   {/* Stock, Featured, and Discount Controls */}
-                  <div className="space-y-4 md:col-span-2 border p-4 rounded-xl bg-muted/10 grid md:grid-cols-3 gap-4 items-center">
-                    <div className="flex items-center justify-between p-2 bg-background rounded-lg border">
+                  <div className="space-y-4 md:col-span-2 border p-4 rounded-xl bg-muted/10 grid md:grid-cols-3 gap-4 items-stretch">
+                    <div className="flex items-center justify-between p-3 bg-background rounded-lg border min-h-[72px]">
                       <div className="flex flex-col gap-0.5">
                         <Label className="font-bold">In Stock</Label>
                         <span className="text-[10px] text-muted-foreground">Available for purchase</span>
@@ -284,7 +284,7 @@ const Admin = () => {
                       />
                     </div>
 
-                    <div className="flex items-center justify-between p-2 bg-background rounded-lg border">
+                    <div className="flex items-center justify-between p-3 bg-background rounded-lg border min-h-[72px]">
                       <div className="flex flex-col gap-0.5">
                         <Label className="font-bold">Featured Product</Label>
                         <span className="text-[10px] text-muted-foreground">Show in Hero & Offers</span>
@@ -295,11 +295,11 @@ const Admin = () => {
                       />
                     </div>
 
-                    <div className="flex flex-col gap-2 p-2 bg-background rounded-lg border">
+                    <div className="flex flex-col justify-center gap-2 p-3 bg-background rounded-lg border min-h-[72px]">
                       <div className="flex justify-between items-center">
                         <Label className="font-bold">Discount: {newProduct.discountPercent}%</Label>
                         {newProduct.discountPercent > 0 && (
-                          <Badge className="bg-red-500 text-white text-[10px]">SALE</Badge>
+                          <Badge className="bg-red-500 text-white text-[10px] px-1.5 py-0">SALE</Badge>
                         )}
                       </div>
                       <Slider 
@@ -673,8 +673,8 @@ const Admin = () => {
               </div>
 
               {/* Edit Stock, Featured, and Discount Controls */}
-              <div className="space-y-4 border p-4 rounded-xl bg-muted/10 grid md:grid-cols-3 gap-4 items-center">
-                <div className="flex items-center justify-between p-2 bg-background rounded-lg border">
+              <div className="space-y-4 border p-4 rounded-xl bg-muted/10 grid md:grid-cols-3 gap-4 items-stretch">
+                <div className="flex items-center justify-between p-3 bg-background rounded-lg border min-h-[72px]">
                   <div className="flex flex-col gap-0.5">
                     <Label className="font-bold">In Stock</Label>
                     <span className="text-[10px] text-muted-foreground">Available for purchase</span>
@@ -685,7 +685,7 @@ const Admin = () => {
                   />
                 </div>
 
-                <div className="flex items-center justify-between p-2 bg-background rounded-lg border">
+                <div className="flex items-center justify-between p-3 bg-background rounded-lg border min-h-[72px]">
                   <div className="flex flex-col gap-0.5">
                     <Label className="font-bold">Featured Product</Label>
                     <span className="text-[10px] text-muted-foreground">Show in Hero & Offers</span>
@@ -696,11 +696,11 @@ const Admin = () => {
                   />
                 </div>
 
-                <div className="flex flex-col gap-2 p-2 bg-background rounded-lg border">
+                <div className="flex flex-col justify-center gap-2 p-3 bg-background rounded-lg border min-h-[72px]">
                   <div className="flex justify-between items-center">
                     <Label className="font-bold">Discount: {editingProduct.discountPercent || 0}%</Label>
                     {(editingProduct.discountPercent || 0) > 0 && (
-                      <Badge className="bg-red-500 text-white text-[10px]">SALE</Badge>
+                      <Badge className="bg-red-500 text-white text-[10px] px-1.5 py-0">SALE</Badge>
                     )}
                   </div>
                   <Slider 
