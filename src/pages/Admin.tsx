@@ -273,42 +273,48 @@ const Admin = () => {
 
                   {/* Stock, Featured, and Discount Controls */}
                   <div className="space-y-4 md:col-span-2 border p-4 rounded-xl bg-muted/10 grid md:grid-cols-3 gap-4 items-stretch">
-                    <div className="flex items-center justify-between p-3 bg-background rounded-lg border min-h-[72px]">
-                      <div className="flex flex-col gap-0.5">
-                        <Label className="font-bold">In Stock</Label>
-                        <span className="text-[10px] text-muted-foreground">Available for purchase</span>
+                    <div className="flex flex-col justify-between p-4 bg-background rounded-xl border h-full min-h-[90px]">
+                      <div className="flex justify-between items-start w-full">
+                        <div className="flex flex-col gap-0.5">
+                          <Label className="font-bold">In Stock</Label>
+                          <span className="text-[10px] text-muted-foreground">Available for purchase</span>
+                        </div>
+                        <Switch 
+                          checked={newProduct.inStock} 
+                          onCheckedChange={val => setNewProduct({...newProduct, inStock: val})} 
+                        />
                       </div>
-                      <Switch 
-                        checked={newProduct.inStock} 
-                        onCheckedChange={val => setNewProduct({...newProduct, inStock: val})} 
-                      />
                     </div>
 
-                    <div className="flex items-center justify-between p-3 bg-background rounded-lg border min-h-[72px]">
-                      <div className="flex flex-col gap-0.5">
-                        <Label className="font-bold">Featured Product</Label>
-                        <span className="text-[10px] text-muted-foreground">Show in Hero & Offers</span>
+                    <div className="flex flex-col justify-between p-4 bg-background rounded-xl border h-full min-h-[90px]">
+                      <div className="flex justify-between items-start w-full">
+                        <div className="flex flex-col gap-0.5">
+                          <Label className="font-bold">Featured Product</Label>
+                          <span className="text-[10px] text-muted-foreground">Show in Hero & Offers</span>
+                        </div>
+                        <Switch 
+                          checked={newProduct.isFeatured} 
+                          onCheckedChange={val => setNewProduct({...newProduct, isFeatured: val})} 
+                        />
                       </div>
-                      <Switch 
-                        checked={newProduct.isFeatured} 
-                        onCheckedChange={val => setNewProduct({...newProduct, isFeatured: val})} 
-                      />
                     </div>
 
-                    <div className="flex flex-col justify-center gap-2 p-3 bg-background rounded-lg border min-h-[72px]">
-                      <div className="flex justify-between items-center">
+                    <div className="flex flex-col justify-between p-4 bg-background rounded-xl border h-full min-h-[90px] gap-2">
+                      <div className="flex justify-between items-center w-full">
                         <Label className="font-bold">Discount: {newProduct.discountPercent}%</Label>
                         {newProduct.discountPercent > 0 && (
                           <Badge className="bg-red-500 text-white text-[10px] px-1.5 py-0">SALE</Badge>
                         )}
                       </div>
-                      <Slider 
-                        value={[newProduct.discountPercent]} 
-                        min={0} 
-                        max={100} 
-                        step={1} 
-                        onValueChange={val => setNewProduct({...newProduct, discountPercent: val[0]})} 
-                      />
+                      <div className="pt-1">
+                        <Slider 
+                          value={[newProduct.discountPercent]} 
+                          min={0} 
+                          max={100} 
+                          step={1} 
+                          onValueChange={val => setNewProduct({...newProduct, discountPercent: val[0]})} 
+                        />
+                      </div>
                     </div>
                   </div>
 
@@ -674,42 +680,48 @@ const Admin = () => {
 
               {/* Edit Stock, Featured, and Discount Controls */}
               <div className="space-y-4 border p-4 rounded-xl bg-muted/10 grid md:grid-cols-3 gap-4 items-stretch">
-                <div className="flex items-center justify-between p-3 bg-background rounded-lg border min-h-[72px]">
-                  <div className="flex flex-col gap-0.5">
-                    <Label className="font-bold">In Stock</Label>
-                    <span className="text-[10px] text-muted-foreground">Available for purchase</span>
+                <div className="flex flex-col justify-between p-4 bg-background rounded-xl border h-full min-h-[90px]">
+                  <div className="flex justify-between items-start w-full">
+                    <div className="flex flex-col gap-0.5">
+                      <Label className="font-bold">In Stock</Label>
+                      <span className="text-[10px] text-muted-foreground">Available for purchase</span>
+                    </div>
+                    <Switch 
+                      checked={editingProduct.inStock !== false} 
+                      onCheckedChange={val => setEditingProduct({...editingProduct, inStock: val})} 
+                    />
                   </div>
-                  <Switch 
-                    checked={editingProduct.inStock !== false} 
-                    onCheckedChange={val => setEditingProduct({...editingProduct, inStock: val})} 
-                  />
                 </div>
 
-                <div className="flex items-center justify-between p-3 bg-background rounded-lg border min-h-[72px]">
-                  <div className="flex flex-col gap-0.5">
-                    <Label className="font-bold">Featured Product</Label>
-                    <span className="text-[10px] text-muted-foreground">Show in Hero & Offers</span>
+                <div className="flex flex-col justify-between p-4 bg-background rounded-xl border h-full min-h-[90px]">
+                  <div className="flex justify-between items-start w-full">
+                    <div className="flex flex-col gap-0.5">
+                      <Label className="font-bold">Featured Product</Label>
+                      <span className="text-[10px] text-muted-foreground">Show in Hero & Offers</span>
+                    </div>
+                    <Switch 
+                      checked={!!editingProduct.isFeatured} 
+                      onCheckedChange={val => setEditingProduct({...editingProduct, isFeatured: val})} 
+                    />
                   </div>
-                  <Switch 
-                    checked={!!editingProduct.isFeatured} 
-                    onCheckedChange={val => setEditingProduct({...editingProduct, isFeatured: val})} 
-                  />
                 </div>
 
-                <div className="flex flex-col justify-center gap-2 p-3 bg-background rounded-lg border min-h-[72px]">
-                  <div className="flex justify-between items-center">
+                <div className="flex flex-col justify-between p-4 bg-background rounded-xl border h-full min-h-[90px] gap-2">
+                  <div className="flex justify-between items-center w-full">
                     <Label className="font-bold">Discount: {editingProduct.discountPercent || 0}%</Label>
                     {(editingProduct.discountPercent || 0) > 0 && (
                       <Badge className="bg-red-500 text-white text-[10px] px-1.5 py-0">SALE</Badge>
                     )}
                   </div>
-                  <Slider 
-                    value={[editingProduct.discountPercent || 0]} 
-                    min={0} 
-                    max={100} 
-                    step={1} 
-                    onValueChange={val => setEditingProduct({...editingProduct, discountPercent: val[0]})} 
-                  />
+                  <div className="pt-1">
+                    <Slider 
+                      value={[editingProduct.discountPercent || 0]} 
+                      min={0} 
+                      max={100} 
+                      step={1} 
+                      onValueChange={val => setEditingProduct({...editingProduct, discountPercent: val[0]})} 
+                    />
+                  </div>
                 </div>
               </div>
 
