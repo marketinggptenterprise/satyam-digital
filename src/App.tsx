@@ -10,6 +10,7 @@ import { ThemeProvider } from "./components/ThemeProvider";
 import Index from "./pages/Index";
 import Admin from "./pages/Admin";
 import AdminLogin from "./pages/AdminLogin";
+import ProductDetail from "./pages/ProductDetail"; // Import the new page
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/product/:productId" element={<ProductDetail />} /> {/* New product detail route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
