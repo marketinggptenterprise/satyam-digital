@@ -18,9 +18,11 @@ export const ProductCard = ({ product, category, brand }: ProductCardProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const discountPrice = product.price * 1.2;
 
-  const imagesList = product.images && product.images.filter(img => img.trim() !== '').length > 0
-    ? product.images.filter(img => img.trim() !== '')
-    : [product.image];
+  // Ensure product.images is an array and filter out non-string or empty images
+  const safeImages = Array.isArray(product.images) ? product.images : [];
+  const filteredImages = safeImages.filter(img => typeof img === 'string' && img.trim() !== '');
+  const imagesList = filteredImages.length > 0 ? filteredImages : [product.image];
+
 
   const handleAddToCart = () => {
     addToCart(product);

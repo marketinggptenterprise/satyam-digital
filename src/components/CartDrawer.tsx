@@ -15,7 +15,11 @@ export const CartDrawer = () => {
     const productDetails = cart
       .map(
         (item) => {
-          const itemImage = item.images && item.images.length > 0 ? item.images[0] : item.image;
+          // Ensure item.images is an array and find the first valid image, or fallback to item.image
+          const safeItemImages = Array.isArray(item.images) ? item.images : [];
+          const firstValidImage = safeItemImages.find(img => typeof img === 'string' && img.trim() !== '');
+          const itemImage = firstValidImage || item.image;
+
           return `• *${item.name}*\n  Qty: ${item.quantity}\n  Price: ₹${(
             item.price * item.quantity
           ).toLocaleString("en-IN")}\n  Image: ${itemImage}`;
@@ -65,7 +69,11 @@ export const CartDrawer = () => {
             </div>
           ) : (
             cart.map((item) => {
-              const itemImage = item.images && item.images.length > 0 ? item.images[0] : item.image;
+              // Ensure item.images is an array and find the first valid image, or fallback to item.image
+              const safeItemImages = Array.isArray(item.images) ? item.images : [];
+              const firstValidImage = safeItemImages.find(img => typeof img === 'string' && img.trim() !== '');
+              const itemImage = firstValidImage || item.image;
+              
               return (
                 <div key={item.id} className="flex gap-4">
                   <div className="h-20 w-20 rounded-lg bg-muted overflow-hidden shrink-0">
