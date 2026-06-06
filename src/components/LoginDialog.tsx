@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { useAuth } from "../context/AuthContext";
-import { LogIn, UserPlus } from "lucide-react";
+import { LogIn, UserPlus, Info } from "lucide-react";
+import { Alert, AlertDescription } from "./ui/alert";
 
 export const LoginDialog = ({ children }: { children: React.ReactNode }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -36,8 +37,23 @@ export const LoginDialog = ({ children }: { children: React.ReactNode }) => {
           <DialogTitle className="text-2xl font-bold text-center">
             {isLogin ? 'Welcome Back' : 'Create Account'}
           </DialogTitle>
+          <DialogDescription className="text-center">
+            {isLogin 
+              ? 'Enter your credentials to access your account' 
+              : 'Join Satyam Digital to track your orders and more'}
+          </DialogDescription>
         </DialogHeader>
+        
         <div className="space-y-6 py-4">
+          {!isLogin && (
+            <Alert className="bg-primary/5 border-primary/20">
+              <Info className="h-4 w-4 text-primary" />
+              <AlertDescription className="text-xs text-primary/80">
+                After signing up, please check your email to verify your account before logging in.
+              </AlertDescription>
+            </Alert>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email Address</Label>
@@ -61,13 +77,13 @@ export const LoginDialog = ({ children }: { children: React.ReactNode }) => {
                 required
               />
             </div>
-            <Button type="submit" className="w-full gap-2" disabled={isLoading}>
+            <Button type="submit" className="w-full gap-2 h-11 font-bold" disabled={isLoading}>
               {isLogin ? <LogIn className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
-              {isLoading ? 'Processing...' : (isLogin ? 'Sign In' : 'Sign Up')}
+              {isLoading ? 'Processing...' : (isLogin ? 'Sign In' : 'Create Account')}
             </Button>
           </form>
 
-          <div className="text-center text-sm">
+          <div className="text-center text-sm border-t pt-4">
             <span className="text-muted-foreground">
               {isLogin ? "Don't have an account? " : "Already have an account? "}
             </span>
@@ -76,7 +92,7 @@ export const LoginDialog = ({ children }: { children: React.ReactNode }) => {
               className="text-primary font-bold hover:underline"
               onClick={() => setIsLogin(!isLogin)}
             >
-              {isLogin ? 'Sign Up' : 'Sign In'}
+              {isLogin ? 'Sign Up Now' : 'Sign In Instead'}
             </button>
           </div>
         </div>
