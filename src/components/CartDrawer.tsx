@@ -1,12 +1,12 @@
 "use client";
 
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
 import { Button } from "./ui/button";
 import { ShoppingCart, Minus, Plus, Trash2, MessageSquare } from "lucide-react";
 import { useCart } from "../hooks/useCart";
 import { Separator } from "./ui/separator";
 
-export const CartDrawer = ({ children }: { children: React.ReactNode }) => {
+export const CartDrawer = () => {
   const { cart, updateQuantity, removeFromCart, subtotal, totalItems } = useCart();
 
   const handleWhatsAppCheckout = () => {
@@ -26,7 +26,15 @@ export const CartDrawer = ({ children }: { children: React.ReactNode }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        {children}
+        <Button variant="ghost" className="flex flex-col items-center gap-1 p-2 relative">
+          <ShoppingCart className="h-6 w-6 text-gray-600 group-hover:text-primary" />
+          <span className="text-[10px] font-medium text-gray-500">Cart</span>
+          {totalItems > 0 && (
+            <span className="absolute -top-1 -right-1 bg-secondary text-primary text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center animate-in zoom-in">
+              {totalItems}
+            </span>
+          )}
+        </Button>
       </SheetTrigger>
       <SheetContent className="w-full sm:max-w-md flex flex-col p-0">
         <SheetHeader className="p-6 border-b">
