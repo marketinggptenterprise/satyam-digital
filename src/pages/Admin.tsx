@@ -1,4 +1,7 @@
-import { useState } from 'react';
+"use client";
+
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useStore } from '../hooks/useStore';
 import { Navbar } from '../components/Navbar';
 import { Button } from '../components/ui/button';
@@ -8,12 +11,26 @@ import { Textarea } from '../components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { Plus, Trash2, Package, Tag, Briefcase } from 'lucide-react';
+import { Badge } from '../components/ui/badge';
+import { Plus, Trash2, Package, Tag, Briefcase, LogOut } from 'lucide-react';
 import { showSuccess } from '../utils/toast';
 
 const Admin = () => {
   const { products, categories, brands, addProduct, deleteProduct, addCategory, addBrand } = useStore();
+  const navigate = useNavigate();
   
+  useEffect(() => {
+    const isAuth = localStorage.getItem('admin_auth');
+    if (!isAuth) {
+      navigate('/admin/login');
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('admin_auth');
+    navigate('/admin/login');
+  };
+
   const [newProduct, setNewProduct] = useState({
     name: '',
     description: '',
@@ -42,6 +59,9 @@ const Admin = () => {
       <main className="container py-8">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+          <Button variant="outline" onClick={handleLogout} className="gap-2 text-destructive hover:text-destructive">
+            <LogOut className="h-4 w-4" /> Logout
+          </Button>
         </div>
 
         <Tabs defaultValue="products" className="space-y-6">
@@ -128,7 +148,7 @@ const Admin = () => {
                       required 
                     />
                   </div>
-                  <Button type="submit" className="md:col-span-2 gap-2">
+                  <Button type="submit" className="md:col-span-2 gap-2 bg-primary hover:bg-primary/90">
                     <Plus className="h-4 w-4" /> Add Product
                   </Button>
                 </form>
