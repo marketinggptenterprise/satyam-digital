@@ -43,7 +43,6 @@ const Index = () => {
     <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 text-gray-900 dark:text-gray-100 transition-colors duration-300 relative overflow-hidden">
       {/* Background Decorative Blobs for Liquid Glass Effect */}
       <div className="absolute top-20 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full filter blur-[120px] opacity-20 dark:opacity-30 pointer-events-none animate-pulse duration-[8000ms]" />
-      <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full filter blur-[120px] opacity-20 dark:opacity-30 pointer-events-none animate-pulse duration-[10000ms]" />
       
       <Navbar />
       
