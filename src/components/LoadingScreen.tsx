@@ -1,18 +1,21 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 export const LoadingScreen = () => {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(timer);
-          setTimeout(() => setLoading(false), 500);
+          // Start fade out slightly after progress hits 100
+          setTimeout(() => setFadeOut(true), 200);
+          // Remove component from DOM after transition finishes
+          setTimeout(() => setLoading(false), 1000);
           return 100;
         }
         return prev + 2;
@@ -22,41 +25,26 @@ export const LoadingScreen = () => {
     return () => clearInterval(timer);
   }, []);
 
+  if (!loading) return null;
+
   return (
-    <AnimatePresence>
-      {loading && (
-        <motion.div
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
-          className="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center"
-        >
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="mb-8"
-          >
-            <img src="/logo.png" alt="Satyam Digital" className="h-24 w-auto" />
-          </motion.div>
-          
-          <div className="w-64 h-1 bg-gray-100 rounded-full overflow-hidden relative">
-            <motion.div 
-              className="absolute top-0 left-0 h-full bg-primary"
-              initial={{ width: 0 }}
-              animate={{ width: `${progress}%` }}
-            />
-          </div>
-          
-          <motion.p 
-            className="mt-4 text-xs font-bold text-primary tracking-[0.2em] uppercase"
-            animate={{ opacity: [0.4, 1, 0.4] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          >
-            Loading Experience
-          </motion.p>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <div
+      className={`fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center transition-opacity duration-700 ease-in-out ${fadeOut ? 'opacity-0' : 'opacity-100'}`}
+    >
+      <div className="mb-8 animate-pulse">
+        <img src="/logo.png" alt="Satyam Digital" className="h-24 w-auto" />
+      </div>
+      
+      <div className="w-64 h-1 bg-gray-100 rounded-full overflow-hidden relative">
+        <div 
+          className="absolute top-0 left-0 h-full bg-primary transition-all duration-300 ease-out"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+      
+      <p className="mt-4 text-xs font-bold text-primary tracking-[0.2em] uppercase animate-pulse">
+        Loading Experience
+      </p>
+    </div>
   );
 };
