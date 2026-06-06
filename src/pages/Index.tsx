@@ -114,7 +114,13 @@ const Index = () => {
         <div className="container grid md:grid-cols-4 gap-8">
           <div className="space-y-4">
             <div className="flex items-center">
-              <img src="/logo.png" alt="Satyam Digital" className="h-10 w-auto brightness-0 invert" />
+              <div className="bg-white p-1 rounded-lg">
+                <img 
+                  src="dyad-media://media/gentle-tardigrade-nap/.dyad/media/67dd33d278279b0977d699cba0652aefff5596e1380b25706ea58bb5084d86dd.png" 
+                  alt="Satyam Digital" 
+                  className="h-12 w-auto object-contain" 
+                />
+              </div>
               <div className="ml-2 leading-tight">
                 <span className="text-lg font-black text-white block">SATYAM</span>
                 <span className="text-xs font-bold text-secondary tracking-widest">DIGITAL</span>
