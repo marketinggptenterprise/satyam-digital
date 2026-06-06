@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { useStore } from '../hooks/useStore';
 import { Navbar } from '../components/Navbar';
 import { ProductCard } from '../components/ProductCard';
+import { HeroSlider } from '../components/HeroSlider';
 import { Badge } from '../components/ui/badge';
 import { Smartphone, Tv, Laptop, Watch, Speaker, Refrigerator } from 'lucide-react';
 
 const Index = () => {
-  const { products, categories, brands } = useStore();
+  const { products, categories, brands, banners } = useStore();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const filteredProducts = products.filter(p => {
@@ -26,30 +27,8 @@ const Index = () => {
     <div className="min-h-screen bg-[#f4f4f4]">
       <Navbar />
       
-      {/* Hero Banner */}
-      <section className="container py-6">
-        <div className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-primary to-blue-900 h-[300px] md:h-[400px] flex items-center">
-          <div className="px-8 md:px-16 max-w-xl relative z-10">
-            <Badge className="bg-secondary text-primary font-bold mb-4">FESTIVAL SALE IS LIVE</Badge>
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-4 leading-tight">
-              Upgrade Your <span className="text-secondary">Digital Life</span>
-            </h1>
-            <p className="text-white/80 text-lg mb-8">
-              Get up to 40% off on latest smartphones and home appliances.
-            </p>
-            <button className="bg-secondary text-primary font-black px-8 py-3 rounded-full hover:scale-105 transition-transform">
-              SHOP NOW
-            </button>
-          </div>
-          <div className="absolute right-0 bottom-0 w-1/2 h-full opacity-20 md:opacity-100">
-            <img 
-              src="https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&q=80&w=800" 
-              alt="Hero" 
-              className="h-full w-full object-cover"
-            />
-          </div>
-        </div>
-      </section>
+      {/* Hero Slider */}
+      <HeroSlider banners={banners} />
 
       {/* Quick Category Links */}
       <section className="container py-8">

@@ -18,8 +18,18 @@ export interface Product {
   image: string;
 }
 
+export interface Banner {
+  id: string;
+  title: string;
+  subtitle: string;
+  badge: string;
+  image: string;
+  link: string;
+}
+
 export interface StoreData {
   products: Product[];
   categories: Category[];
   brands: Brand[];
+  banners: Banner[];
 }

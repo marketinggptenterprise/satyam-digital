@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { StoreData, Product, Category, Brand } from '../types/store';
+import { StoreData, Product, Category, Brand, Banner } from '../types/store';
 
-const STORAGE_KEY = 'satyam_digital_store_data';
+const STORAGE_KEY = 'satyam_digital_store_data_v2';
 
 const initialData: StoreData = {
   products: [
@@ -34,6 +34,24 @@ const initialData: StoreData = {
     { id: 'samsung', name: 'Samsung' },
     { id: 'lg', name: 'LG' },
     { id: 'sony', name: 'Sony' }
+  ],
+  banners: [
+    {
+      id: '1',
+      title: 'Upgrade Your Digital Life',
+      subtitle: 'Get up to 40% off on latest smartphones and home appliances.',
+      badge: 'FESTIVAL SALE IS LIVE',
+      image: 'https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&q=80&w=800',
+      link: '#'
+    },
+    {
+      id: '2',
+      title: 'Smart TV Revolution',
+      subtitle: 'Cinematic experience at your home with Neo QLED technology.',
+      badge: 'NEW ARRIVAL',
+      image: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&q=80&w=800',
+      link: '#'
+    }
   ]
 };
 
@@ -66,11 +84,22 @@ export function useStore() {
     setData(prev => ({ ...prev, brands: [...prev.brands, newBrand] }));
   };
 
+  const addBanner = (banner: Omit<Banner, 'id'>) => {
+    const newBanner = { ...banner, id: Date.now().toString() };
+    setData(prev => ({ ...prev, banners: [...prev.banners, newBanner] }));
+  };
+
+  const deleteBanner = (id: string) => {
+    setData(prev => ({ ...prev, banners: prev.banners.filter(b => b.id !== id) }));
+  };
+
   return {
     ...data,
     addProduct,
     deleteProduct,
     addCategory,
-    addBrand
+    addBrand,
+    addBanner,
+    deleteBanner
   };
 }

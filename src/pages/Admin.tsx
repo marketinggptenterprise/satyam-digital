@@ -12,11 +12,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Badge } from '../components/ui/badge';
-import { Plus, Trash2, Package, Tag, Briefcase, LogOut } from 'lucide-react';
+import { Plus, Trash2, Package, Tag, Briefcase, LogOut, Image as ImageIcon } from 'lucide-react';
 import { showSuccess } from '../utils/toast';
 
 const Admin = () => {
-  const { products, categories, brands, addProduct, deleteProduct, addCategory, addBrand } = useStore();
+  const { products, categories, brands, banners, addProduct, deleteProduct, addCategory, addBrand, addBanner, deleteBanner } = useStore();
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -40,6 +40,14 @@ const Admin = () => {
     image: ''
   });
 
+  const [newBanner, setNewBanner] = useState({
+    title: '',
+    subtitle: '',
+    badge: '',
+    image: '',
+    link: '#'
+  });
+
   const [newCat, setNewCat] = useState('');
   const [newBrand, setNewBrand] = useState('');
 
@@ -51,6 +59,13 @@ const Admin = () => {
     });
     setNewProduct({ name: '', description: '', price: '', categoryId: '', brandId: '', image: '' });
     showSuccess('Product added successfully!');
+  };
+
+  const handleAddBanner = (e: React.FormEvent) => {
+    e.preventDefault();
+    addBanner(newBanner);
+    setNewBanner({ title: '', subtitle: '', badge: '', image: '', link: '#' });
+    showSuccess('Banner added successfully!');
   };
 
   return (
@@ -65,9 +80,12 @@ const Admin = () => {
         </div>
 
         <Tabs defaultValue="products" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 lg:w-[400px]">
+          <TabsList className="grid w-full grid-cols-4 lg:w-[500px]">
             <TabsTrigger value="products" className="gap-2">
               <Package className="h-4 w-4" /> Products
+            </TabsTrigger>
+            <TabsTrigger value="banners" className="gap-2">
+              <ImageIcon className="h-4 w-4" /> Banners
             </TabsTrigger>
             <TabsTrigger value="categories" className="gap-2">
               <Tag className="h-4 w-4" /> Categories
@@ -179,6 +197,85 @@ const Admin = () => {
                       }}
                     >
                       <Trash2 className="h-4 w-4" /> Delete
+                    </Button>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="banners" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Add New Hero Banner</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleAddBanner} className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="btitle">Title</Label>
+                    <Input 
+                      id="btitle" 
+                      value={newBanner.title} 
+                      onChange={e => setNewBanner({...newBanner, title: e.target.value})}
+                      required 
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="bbadge">Badge Text (e.g. SALE)</Label>
+                    <Input 
+                      id="bbadge" 
+                      value={newBanner.badge} 
+                      onChange={e => setNewBanner({...newBanner, badge: e.target.value})}
+                      required 
+                    />
+                  </div>
+                  <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="bsub">Subtitle</Label>
+                    <Input 
+                      id="bsub" 
+                      value={newBanner.subtitle} 
+                      onChange={e => setNewBanner({...newBanner, subtitle: e.target.value})}
+                      required 
+                    />
+                  </div>
+                  <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="bimage">Image URL</Label>
+                    <Input 
+                      id="bimage" 
+                      placeholder="https://..." 
+                      value={newBanner.image} 
+                      onChange={e => setNewBanner({...newBanner, image: e.target.value})}
+                      required 
+                    />
+                  </div>
+                  <Button type="submit" className="md:col-span-2 gap-2 bg-primary hover:bg-primary/90">
+                    <Plus className="h-4 w-4" /> Add Banner
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              {banners.map(banner => (
+                <Card key={banner.id} className="overflow-hidden">
+                  <div className="aspect-video relative">
+                    <img src={banner.image} alt={banner.title} className="h-full w-full object-cover" />
+                    <div className="absolute inset-0 bg-black/40 p-4 flex flex-col justify-end">
+                      <Badge className="w-fit mb-2">{banner.badge}</Badge>
+                      <h3 className="text-white font-bold">{banner.title}</h3>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <Button 
+                      variant="destructive" 
+                      size="sm" 
+                      className="w-full gap-2"
+                      onClick={() => {
+                        deleteBanner(banner.id);
+                        showSuccess('Banner deleted');
+                      }}
+                    >
+                      <Trash2 className="h-4 w-4" /> Remove Banner
                     </Button>
                   </div>
                 </Card>
