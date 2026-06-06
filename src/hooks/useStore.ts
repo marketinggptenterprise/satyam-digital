@@ -117,9 +117,9 @@ export function useStore() {
       try {
         const { error } = await supabase.from('products').insert([newProduct]);
         if (error) throw error;
-      } catch (err) {
+      } catch (err: any) { // Type 'any' for better error handling from Supabase
         console.error("Supabase insert error:", err);
-        showError(`Failed to sync product: ${err instanceof Error ? err.message : String(err)}`);
+        showError(`Failed to sync product: ${err?.message || String(err)}`);
       }
     }
   };
@@ -135,9 +135,9 @@ export function useStore() {
       try {
         const { error } = await supabase.from('products').update(updatedProduct).eq('id', updatedProduct.id);
         if (error) throw error;
-      } catch (err) {
+      } catch (err: any) { // Type 'any' for better error handling from Supabase
         console.error("Supabase update error:", err);
-        showError(`Failed to update product: ${err instanceof Error ? err.message : String(err)}`);
+        showError(`Failed to update product: ${err?.message || String(err)}`);
       }
     }
   };
@@ -150,9 +150,9 @@ export function useStore() {
       try {
         const { error } = await supabase.from('products').delete().eq('id', id);
         if (error) throw error;
-      } catch (err) {
+      } catch (err: any) { // Type 'any' for better error handling from Supabase
         console.error("Supabase delete error:", err);
-        showError(`Failed to delete product: ${err instanceof Error ? err.message : String(err)}`);
+        showError(`Failed to delete product: ${err?.message || String(err)}`);
       }
     }
   };
@@ -167,9 +167,9 @@ export function useStore() {
       try {
         const { error } = await supabase.from('categories').insert([newCategory]);
         if (error) throw error;
-      } catch (err) {
+      } catch (err: any) { // Type 'any' for better error handling from Supabase
         console.error("Supabase category insert error:", err);
-        showError(`Failed to add category: ${err instanceof Error ? err.message : String(err)}`);
+        showError(`Failed to add category: ${err?.message || String(err)}`);
       }
     }
   };
@@ -182,9 +182,9 @@ export function useStore() {
       try {
         const { error } = await supabase.from('categories').delete().eq('id', id);
         if (error) throw error;
-      } catch (err) {
+      } catch (err: any) { // Type 'any' for better error handling from Supabase
         console.error("Supabase category delete error:", err);
-        showError(`Failed to delete category: ${err instanceof Error ? err.message : String(err)}`);
+        showError(`Failed to delete category: ${err?.message || String(err)}`);
       }
     }
   };
@@ -199,9 +199,9 @@ export function useStore() {
       try {
         const { error } = await supabase.from('brands').insert([newBrand]);
         if (error) throw error;
-      } catch (err) {
+      } catch (err: any) { // Type 'any' for better error handling from Supabase
         console.error("Supabase brand insert error:", err);
-        showError(`Failed to add brand: ${err instanceof Error ? err.message : String(err)}`);
+        showError(`Failed to add brand: ${err?.message || String(err)}`);
       }
     }
   };
@@ -214,9 +214,9 @@ export function useStore() {
       try {
         const { error } = await supabase.from('brands').delete().eq('id', id);
         if (error) throw error;
-      } catch (err) {
+      } catch (err: any) { // Type 'any' for better error handling from Supabase
         console.error("Supabase brand delete error:", err);
-        showError(`Failed to delete brand: ${err instanceof Error ? err.message : String(err)}`);
+        showError(`Failed to delete brand: ${err?.message || String(err)}`);
       }
     }
   };
@@ -231,9 +231,9 @@ export function useStore() {
       try {
         const { error } = await supabase.from('banners').insert([newBanner]);
         if (error) throw error;
-      } catch (err) {
+      } catch (err: any) { // Type 'any' for better error handling from Supabase
         console.error("Supabase banner insert error:", err);
-        showError(`Failed to add banner: ${err instanceof Error ? err.message : String(err)}`);
+        showError(`Failed to add banner: ${err?.message || String(err)}`);
       }
     }
   };
@@ -249,9 +249,9 @@ export function useStore() {
       try {
         const { error } = await supabase.from('banners').update(updatedBanner).eq('id', updatedBanner.id);
         if (error) throw error;
-      } catch (err) {
+      } catch (err: any) { // Type 'any' for better error handling from Supabase
         console.error("Supabase banner update error:", err);
-        showError(`Failed to update banner: ${err instanceof Error ? err.message : String(err)}`);
+        showError(`Failed to update banner: ${err?.message || String(err)}`);
       }
     }
   };
@@ -264,9 +264,9 @@ export function useStore() {
       try {
         const { error } = await supabase.from('banners').delete().eq('id', id);
         if (error) throw error;
-      } catch (err) {
+      } catch (err: any) { // Type 'any' for better error handling from Supabase
         console.error("Supabase banner delete error:", err);
-        showError(`Failed to delete banner: ${err instanceof Error ? err.message : String(err)}`);
+        showError(`Failed to delete banner: ${err?.message || String(err)}`);
       }
     }
   };
