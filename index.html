@@ -7,7 +7,20 @@
   </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Initial loading screen to prevent blank page flash before React app mounts -->
+      <div id="initial-loader" class="initial-loader-wrapper">
+        <div class="mb-8 animate-pulse">
+          <img src="/logo.png" alt="Satyam Digital Loading" class="h-24 w-auto" />
+        </div>
+        <div class="w-64 h-1 bg-gray-100 rounded-full overflow-hidden relative">
+          <div class="absolute top-0 left-0 h-full bg-primary" style="width: 50%; animation: initial-progress 2s infinite alternate;"></div>
+        </div>
+        <p class="mt-4 text-xs font-bold text-primary tracking-[0.2em] uppercase animate-pulse">
+          Loading Experience
+        </p>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
