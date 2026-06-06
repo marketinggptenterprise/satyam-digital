@@ -188,11 +188,18 @@ export const Navbar = () => {
           </Button>
           <nav className="flex items-center gap-6 text-sm font-semibold text-gray-700 dark:text-gray-200">
             {categoriesList.map((cat) => (
-              <Link key={cat.id} to={`/?cat=${cat.id}`} className="hover:text-primary hover:scale-105 transition-all duration-200">
+              <Link 
+                key={cat.id} 
+                to={`/?cat=${cat.id}`} 
+                className="relative py-1 hover:text-primary hover:scale-105 transition-all duration-200 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100"
+              >
                 {cat.name}
               </Link>
             ))}
-            <Link to="/?q=offer" className="text-red-600 font-bold hover:text-red-700 hover:scale-105 transition-all duration-200">
+            <Link 
+              to="/?q=offer" 
+              className="relative py-1 text-red-600 font-bold hover:text-red-700 hover:scale-105 transition-all duration-200 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-red-600 after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100"
+            >
               Offers
             </Link>
           </nav>

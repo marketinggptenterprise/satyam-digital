@@ -53,12 +53,14 @@ const Index = () => {
             <div 
               key={link.id}
               onClick={() => setSearchParams({ cat: link.id })}
-              className={`flex flex-col items-center p-4 rounded-2xl bg-white dark:bg-zinc-900 shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 border-2 ${selectedCategory === link.id ? 'border-primary' : 'border-transparent'}`}
+              className={`group flex flex-col items-center p-4 rounded-2xl bg-white dark:bg-zinc-900 shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 border-2 ${selectedCategory === link.id ? 'border-primary' : 'border-transparent'}`}
             >
               <div className="h-12 w-12 rounded-full bg-primary/5 flex items-center justify-center mb-2 transition-transform duration-300 group-hover:scale-110">
                 <link.icon className="h-6 w-6 text-primary" />
               </div>
-              <span className="text-xs font-bold text-gray-700 dark:text-gray-300">{link.name}</span>
+              <span className="relative text-xs font-bold text-gray-700 dark:text-gray-300 py-1 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 group-hover:after:origin-bottom-left group-hover:after:scale-x-100">
+                {link.name}
+              </span>
             </div>
           ))}
         </div>
@@ -170,19 +172,21 @@ const Index = () => {
           <div>
             <h4 className="font-bold mb-4">Quick Links</h4>
             <ul className="text-sm text-white/60 space-y-2">
-              <li className="hover:text-secondary hover:translate-x-1 transition-all duration-200 cursor-pointer">About Us</li>
-              <li className="hover:text-secondary hover:translate-x-1 transition-all duration-200 cursor-pointer">Contact Us</li>
-              <li className="hover:text-secondary hover:translate-x-1 transition-all duration-200 cursor-pointer">Store Locator</li>
-              <li className="hover:text-secondary hover:translate-x-1 transition-all duration-200 cursor-pointer">Careers</li>
+              {['About Us', 'Contact Us', 'Store Locator', 'Careers'].map((link, idx) => (
+                <li key={idx} className="relative w-fit hover:text-secondary hover:translate-x-1 transition-all duration-200 cursor-pointer py-1 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-secondary after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100">
+                  {link}
+                </li>
+              ))}
             </ul>
           </div>
           <div>
             <h4 className="font-bold mb-4">Policies</h4>
             <ul className="text-sm text-white/60 space-y-2">
-              <li className="hover:text-secondary hover:translate-x-1 transition-all duration-200 cursor-pointer">Privacy Policy</li>
-              <li className="hover:text-secondary hover:translate-x-1 transition-all duration-200 cursor-pointer">Terms & Conditions</li>
-              <li className="hover:text-secondary hover:translate-x-1 transition-all duration-200 cursor-pointer">Shipping Policy</li>
-              <li className="hover:text-secondary hover:translate-x-1 transition-all duration-200 cursor-pointer">Return Policy</li>
+              {['Privacy Policy', 'Terms & Conditions', 'Shipping Policy', 'Return Policy'].map((link, idx) => (
+                <li key={idx} className="relative w-fit hover:text-secondary hover:translate-x-1 transition-all duration-200 cursor-pointer py-1 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-secondary after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100">
+                  {link}
+                </li>
+              ))}
             </ul>
           </div>
           <div>
