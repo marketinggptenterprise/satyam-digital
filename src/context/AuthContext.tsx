@@ -50,8 +50,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signUp = async (email: string, password: string) => {
     try {
       const { error } = await supabase.auth.signUp({ email, password });
-      if (error) throw error;
-      showSuccess('Account created! Please check your email for verification.');
+      if (error) {
+        if (error.message.includes('rate limit')) {
+          throw new Error('Email limit reached. Please disable "Confirm Email" in your Supabase Dashboard to continue testing.');
+        }
+        throw error;
+      }
+      showSuccess('Account created! You can now log in.');
     } catch (error: any) {
       showError(error.message || 'Error creating account');
     }
