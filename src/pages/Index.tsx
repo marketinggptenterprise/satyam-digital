@@ -53,9 +53,9 @@ const Index = () => {
             <div 
               key={link.id}
               onClick={() => setSearchParams({ cat: link.id })}
-              className={`flex flex-col items-center p-4 rounded-2xl bg-white shadow-sm cursor-pointer hover:shadow-md transition-all border-2 ${selectedCategory === link.id ? 'border-primary' : 'border-transparent'}`}
+              className={`flex flex-col items-center p-4 rounded-2xl bg-white shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 border-2 ${selectedCategory === link.id ? 'border-primary' : 'border-transparent'}`}
             >
-              <div className="h-12 w-12 rounded-full bg-primary/5 flex items-center justify-center mb-2">
+              <div className="h-12 w-12 rounded-full bg-primary/5 flex items-center justify-center mb-2 transition-transform duration-300 group-hover:scale-110">
                 <link.icon className="h-6 w-6 text-primary" />
               </div>
               <span className="text-xs font-bold text-gray-700">{link.name}</span>
@@ -72,7 +72,7 @@ const Index = () => {
               {searchQuery ? `Search results for "${searchQuery}"` : selectedCategory ? `${categories.find(c => c.id === selectedCategory)?.name || 'Products'}` : 'Trending Products'}
             </h2>
             {(selectedCategory || searchQuery) && (
-              <Button variant="link" onClick={clearFilters} className="p-0 h-auto text-xs text-muted-foreground gap-1 mt-1">
+              <Button variant="link" onClick={clearFilters} className="p-0 h-auto text-xs text-muted-foreground gap-1 mt-1 hover:text-primary transition-colors">
                 <X className="h-3 w-3" /> Clear all filters
               </Button>
             )}
@@ -81,7 +81,7 @@ const Index = () => {
           <div className="flex flex-wrap gap-2">
             <Badge 
               variant={!selectedCategory ? "default" : "outline"}
-              className="cursor-pointer px-4 py-1"
+              className="cursor-pointer px-4 py-1 hover:scale-105 transition-transform duration-200"
               onClick={() => {
                 const params = new URLSearchParams(searchParams);
                 params.delete('cat');
@@ -94,7 +94,7 @@ const Index = () => {
               <Badge 
                 key={cat.id}
                 variant={selectedCategory === cat.id ? "default" : "outline"}
-                className="cursor-pointer px-4 py-1"
+                className="cursor-pointer px-4 py-1 hover:scale-105 transition-transform duration-200"
                 onClick={() => {
                   const params = new URLSearchParams(searchParams);
                   params.set('cat', cat.id);
@@ -125,7 +125,7 @@ const Index = () => {
             </div>
             <p className="text-xl font-bold text-gray-800">No products found</p>
             <p className="text-muted-foreground mt-2">Try adjusting your search or filters to find what you're looking for.</p>
-            <Button onClick={clearFilters} className="mt-6 bg-primary">View All Products</Button>
+            <Button onClick={clearFilters} className="mt-6 bg-primary hover:scale-105 transition-transform duration-200">View All Products</Button>
           </div>
         )}
       </main>
@@ -139,8 +139,8 @@ const Index = () => {
             { title: 'Secure Payment', desc: '100% safe transactions' },
             { title: '24/7 Support', desc: 'Dedicated help center' },
           ].map((feat, i) => (
-            <div key={i} className="text-center">
-              <h4 className="font-bold text-primary">{feat.title}</h4>
+            <div key={i} className="text-center group cursor-pointer">
+              <h4 className="font-bold text-primary group-hover:scale-105 transition-transform duration-300">{feat.title}</h4>
               <p className="text-xs text-gray-500">{feat.desc}</p>
             </div>
           ))}
@@ -170,27 +170,27 @@ const Index = () => {
           <div>
             <h4 className="font-bold mb-4">Quick Links</h4>
             <ul className="text-sm text-white/60 space-y-2">
-              <li>About Us</li>
-              <li>Contact Us</li>
-              <li>Store Locator</li>
-              <li>Careers</li>
+              <li className="hover:text-secondary hover:translate-x-1 transition-all duration-200 cursor-pointer">About Us</li>
+              <li className="hover:text-secondary hover:translate-x-1 transition-all duration-200 cursor-pointer">Contact Us</li>
+              <li className="hover:text-secondary hover:translate-x-1 transition-all duration-200 cursor-pointer">Store Locator</li>
+              <li className="hover:text-secondary hover:translate-x-1 transition-all duration-200 cursor-pointer">Careers</li>
             </ul>
           </div>
           <div>
             <h4 className="font-bold mb-4">Policies</h4>
             <ul className="text-sm text-white/60 space-y-2">
-              <li>Privacy Policy</li>
-              <li>Terms & Conditions</li>
-              <li>Shipping Policy</li>
-              <li>Return Policy</li>
+              <li className="hover:text-secondary hover:translate-x-1 transition-all duration-200 cursor-pointer">Privacy Policy</li>
+              <li className="hover:text-secondary hover:translate-x-1 transition-all duration-200 cursor-pointer">Terms & Conditions</li>
+              <li className="hover:text-secondary hover:translate-x-1 transition-all duration-200 cursor-pointer">Shipping Policy</li>
+              <li className="hover:text-secondary hover:translate-x-1 transition-all duration-200 cursor-pointer">Return Policy</li>
             </ul>
           </div>
           <div>
             <h4 className="font-bold mb-4">Newsletter</h4>
             <p className="text-sm text-white/60 mb-4">Subscribe to get latest updates and offers.</p>
             <div className="flex gap-2">
-              <input className="bg-white/10 border-none rounded-lg px-4 py-2 text-sm flex-1" placeholder="Email" />
-              <button className="bg-secondary text-primary font-bold px-4 py-2 rounded-lg text-sm">Join</button>
+              <input className="bg-white/10 border-none rounded-lg px-4 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-secondary transition-all" placeholder="Email" />
+              <button className="bg-secondary text-primary font-bold px-4 py-2 rounded-lg text-sm hover:scale-105 transition-transform duration-200">Join</button>
             </div>
           </div>
         </div>

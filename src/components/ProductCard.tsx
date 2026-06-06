@@ -38,7 +38,7 @@ export const ProductCard = ({ product, category, brand }: ProductCardProps) => {
   };
 
   return (
-    <Card className="group relative bg-white border-none shadow-sm hover:shadow-xl transition-all duration-300 rounded-xl overflow-hidden flex flex-col h-full">
+    <Card className="group relative bg-white border-none shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 rounded-xl overflow-hidden flex flex-col h-full">
       <div className="absolute top-2 left-2 z-10">
         <Badge className="bg-secondary text-primary font-bold text-[10px] border-none">
           OFFER
@@ -111,7 +111,7 @@ export const ProductCard = ({ product, category, brand }: ProductCardProps) => {
 
           <Button 
             onClick={handleAddToCart}
-            className="w-full bg-primary hover:bg-primary/90 text-white font-bold rounded-lg gap-2"
+            className="w-full bg-primary hover:bg-primary/90 text-white font-bold rounded-lg gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
           >
             <ShoppingCart className="h-4 w-4" /> Add to Cart
           </Button>

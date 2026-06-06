@@ -41,13 +41,13 @@ export const Navbar = () => {
       <div className="bg-primary text-white py-2 text-xs">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1">
+            <span className="flex items-center gap-1 hover:text-secondary transition-colors cursor-pointer">
               <MapPin className="h-3 w-3 text-secondary" /> Kargahir, kenduadihi, Bankura - 722101
             </span>
-            <span className="hidden sm:inline">Contact: +91 9932026227</span>
+            <span className="hidden sm:inline hover:text-secondary transition-colors cursor-pointer">Contact: +91 9932026227</span>
           </div>
           <div className="flex items-center gap-4">
-            <Link to="/admin" className="hover:underline flex items-center gap-1 font-semibold">
+            <Link to="/admin" className="hover:text-secondary flex items-center gap-1 font-semibold transition-colors">
               <Settings className="h-3 w-3 text-secondary" /> Admin Panel
             </Link>
           </div>
@@ -61,7 +61,7 @@ export const Navbar = () => {
           {/* Mobile Hamburger Menu */}
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden h-10 w-10">
+              <Button variant="ghost" size="icon" className="lg:hidden h-10 w-10 hover:bg-primary/5 transition-colors">
                 <Menu className="h-6 w-6 text-gray-700" />
               </Button>
             </SheetTrigger>
@@ -79,7 +79,7 @@ export const Navbar = () => {
                       <Link
                         key={cat.id}
                         to={`/?cat=${cat.id}`}
-                        className="flex items-center gap-3 p-3 rounded-xl hover:bg-muted transition-colors text-gray-700 font-semibold"
+                        className="flex items-center gap-3 p-3 rounded-xl hover:bg-primary/5 hover:translate-x-1 transition-all text-gray-700 font-semibold"
                       >
                         <cat.icon className="h-5 w-5 text-primary" />
                         {cat.name}
@@ -90,7 +90,7 @@ export const Navbar = () => {
                 <div className="border-t pt-6 space-y-2">
                   <Link
                     to="/admin"
-                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-muted transition-colors text-gray-700 font-semibold"
+                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-primary/5 hover:translate-x-1 transition-all text-gray-700 font-semibold"
                   >
                     <Settings className="h-5 w-5 text-primary" />
                     Admin Dashboard
@@ -101,7 +101,7 @@ export const Navbar = () => {
           </Sheet>
 
           {/* Logo */}
-          <Link to="/" className="flex items-center shrink-0">
+          <Link to="/" className="flex items-center shrink-0 hover:scale-105 transition-transform duration-300">
             {logoError ? (
               <div className="leading-tight">
                 <span className="text-lg md:text-xl font-black text-primary block">SATYAM</span>
@@ -119,14 +119,14 @@ export const Navbar = () => {
         </div>
 
         {/* Desktop Search Bar */}
-        <form onSubmit={handleSearch} className="flex-1 max-w-2xl relative hidden md:block">
+        <form onSubmit={handleSearch} className="flex-1 max-w-2xl relative hidden md:block group">
           <Input
             placeholder="Search for Mobiles, Accessories, TV & more..."
-            className="w-full pl-4 pr-12 h-11 border-2 border-primary/20 focus-visible:border-primary rounded-full bg-gray-50/50"
+            className="w-full pl-4 pr-12 h-11 border-2 border-primary/20 focus-visible:border-primary rounded-full bg-gray-50/50 transition-all duration-300 group-hover:border-primary/40"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <Button type="submit" size="icon" className="absolute right-1 top-1 h-9 w-9 rounded-full bg-primary hover:bg-primary/90">
+          <Button type="submit" size="icon" className="absolute right-1 top-1 h-9 w-9 rounded-full bg-primary hover:bg-primary/90 hover:scale-105 active:scale-95 transition-all">
             <Search className="h-4 w-4 text-white" />
           </Button>
         </form>
@@ -137,13 +137,15 @@ export const Navbar = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden h-10 w-10"
+            className="md:hidden h-10 w-10 hover:bg-primary/5 transition-colors"
             onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
           >
             <Search className="h-5 w-5 text-gray-700" />
           </Button>
 
-          <CartDrawer />
+          <div className="hover:scale-105 transition-transform duration-200">
+            <CartDrawer />
+          </div>
         </div>
       </div>
 
@@ -168,16 +170,16 @@ export const Navbar = () => {
       {/* Desktop Category Bar */}
       <div className="border-t bg-white hidden lg:block">
         <div className="max-w-7xl mx-auto px-4 flex items-center gap-8 py-2">
-          <Button variant="ghost" className="font-bold text-primary gap-2 hover:bg-primary/5">
+          <Button variant="ghost" className="font-bold text-primary gap-2 hover:bg-primary/5 transition-colors">
             <Menu className="h-4 w-4" /> Shop By Category
           </Button>
           <nav className="flex items-center gap-6 text-sm font-semibold text-gray-700">
             {categoriesList.map((cat) => (
-              <Link key={cat.id} to={`/?cat=${cat.id}`} className="hover:text-primary transition-colors">
+              <Link key={cat.id} to={`/?cat=${cat.id}`} className="hover:text-primary hover:scale-105 transition-all duration-200">
                 {cat.name}
               </Link>
             ))}
-            <Link to="/?q=offer" className="text-red-600 font-bold hover:text-red-700 transition-colors">
+            <Link to="/?q=offer" className="text-red-600 font-bold hover:text-red-700 hover:scale-105 transition-all duration-200">
               Offers
             </Link>
           </nav>
