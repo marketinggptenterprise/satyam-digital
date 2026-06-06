@@ -22,6 +22,7 @@ export const Navbar = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const { theme, setTheme } = useTheme();
   const suggestionRef = useRef<HTMLDivElement>(null);
+  const mobileSuggestionRef = useRef<HTMLDivElement>(null);
 
   // Sync search input with URL search params if they change externally
   useEffect(() => {
@@ -31,7 +32,10 @@ export const Navbar = () => {
   // Close suggestions when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (suggestionRef.current && !suggestionRef.current.contains(event.target as Node)) {
+      if (
+        suggestionRef.current && !suggestionRef.current.contains(event.target as Node) &&
+        mobileSuggestionRef.current && !mobileSuggestionRef.current.contains(event.target as Node)
+      ) {
         setShowSuggestions(false);
       }
     };
@@ -258,19 +262,57 @@ export const Navbar = () => {
 
       {/* Mobile Search Bar (Expandable) */}
       {isMobileSearchOpen && (
-        <div className="border-t p-3 bg-white/50 dark:bg-zinc-800/50 backdrop-blur-md md:hidden animate-in slide-in-from-top duration-200">
+        <div ref={mobileSuggestionRef} className="border-t p-3 bg-white/50 dark:bg-zinc-800/50 backdrop-blur-md md:hidden animate-in slide-in-from-top duration-200 relative">
           <form onSubmit={handleSearchSubmit} className="relative">
             <Input
               placeholder="Search products..."
               className="w-full pl-4 pr-12 h-10 border border-white/20 dark:border-zinc-700/30 rounded-full bg-white/40 dark:bg-zinc-900/40 backdrop-blur-md dark:text-white"
               value={searchQuery}
               onChange={(e) => handleSearchChange(e.target.value)}
+              onFocus={() => setShowSuggestions(searchQuery.trim().length > 0)}
               autoFocus
             />
             <Button type="submit" size="icon" className="absolute right-1 top-1 h-8 w-8 rounded-full bg-primary hover:bg-primary/90">
               <Search className="h-3.5 w-3.5 text-white dark:text-zinc-950" />
             </Button>
           </form>
+
+          {/* Mobile Dropdown Suggestions */}
+          {showSuggestions && suggestions.length > 0 && (
+            <div className="absolute top-full left-3 right-3 mt-2 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border border-white/20 dark:border-zinc-800/50 rounded-2xl shadow-2xl overflow-hidden z-50 max-h-[300px] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200">
+              {suggestions.map((product) => {
+                const categoryName = categories.find(c => c.id === product.categoryId)?.name || 'Accessories';
+                return (
+                  <div
+                    key={product.id}
+                    onClick={() => handleSuggestionClick(product.name)}
+                    className="flex items-center gap-3 p-3 hover:bg-gray-100 dark:hover:bg-zinc-800/50 cursor-pointer transition-colors border-b last:border-none border-white/10 dark:border-zinc-800/30"
+                  >
+                    <div className="h-10 w-10 rounded-lg bg-white border border-white/20 dark:border-zinc-800/30 p-1 flex items-center justify-center shrink-0 overflow-hidden">
+                      <img 
+                        src={product.images?.[0] || product.image} 
+                        alt={product.name} 
+                        className="h-full w-full object-contain"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-xs font-bold text-gray-800 dark:text-gray-100 truncate">
+                        {product.name}
+                      </h4>
+                      <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                        In <span className="text-primary font-semibold">{categoryName}</span>
+                      </p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <span className="text-xs font-black text-primary">
+                        ₹{product.price.toLocaleString('en-IN')}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
 
