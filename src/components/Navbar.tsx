@@ -92,9 +92,9 @@ export const Navbar = () => {
   ];
 
   return (
-    <header className="w-full bg-white dark:bg-zinc-900 shadow-sm sticky top-0 z-50 transition-colors duration-300">
+    <header className="w-full bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl border-b border-white/20 dark:border-zinc-800/50 sticky top-0 z-50 transition-all duration-300">
       {/* Top Bar */}
-      <div className="bg-primary text-white dark:text-zinc-950 py-2 text-xs font-bold">
+      <div className="bg-primary/90 text-white dark:text-zinc-950 py-2 text-xs font-bold backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1 hover:text-secondary dark:hover:text-zinc-800 transition-colors cursor-pointer">
@@ -117,12 +117,12 @@ export const Navbar = () => {
           {/* Mobile Hamburger Menu */}
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden h-10 w-10 hover:bg-primary/5 transition-colors">
+              <Button variant="ghost" size="icon" className="lg:hidden h-10 w-10 hover:bg-primary/5 transition-colors rounded-full">
                 <Menu className="h-6 w-6 text-gray-700 dark:text-gray-200" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-[300px] p-0 dark:bg-zinc-900">
-              <SheetHeader className="p-6 border-b bg-primary text-white dark:text-zinc-950">
+            <SheetContent side="left" className="w-[300px] p-0 dark:bg-zinc-900/95 backdrop-blur-xl border-r border-white/10 dark:border-zinc-800/50">
+              <SheetHeader className="p-6 border-b bg-primary/90 text-white dark:text-zinc-950 backdrop-blur-md">
                 <SheetTitle className="text-left text-white dark:text-zinc-950 flex items-center gap-2">
                   <span className="font-black tracking-wider">SATYAM DIGITAL</span>
                 </SheetTitle>
@@ -135,7 +135,7 @@ export const Navbar = () => {
                       <Link
                         key={cat.id}
                         to={`/?cat=${cat.id}`}
-                        className="flex items-center gap-3 p-3 rounded-xl hover:bg-primary/5 hover:translate-x-1 transition-all text-gray-700 dark:text-gray-200 font-semibold"
+                        className="flex items-center gap-3 p-3 rounded-xl hover:bg-primary/10 hover:translate-x-1 transition-all text-gray-700 dark:text-gray-200 font-semibold"
                       >
                         <cat.icon className="h-5 w-5 text-primary" />
                         {cat.name}
@@ -146,7 +146,7 @@ export const Navbar = () => {
                 <div className="border-t pt-6 space-y-2">
                   <Link
                     to="/admin"
-                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-primary/5 hover:translate-x-1 transition-all text-gray-700 dark:text-gray-200 font-semibold"
+                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-primary/10 hover:translate-x-1 transition-all text-gray-700 dark:text-gray-200 font-semibold"
                   >
                     <Settings className="h-5 w-5 text-primary" />
                     Admin Dashboard
@@ -179,7 +179,7 @@ export const Navbar = () => {
           <form onSubmit={handleSearchSubmit} className="relative group">
             <Input
               placeholder="Search for Mobiles, Accessories, TV & more..."
-              className="w-full pl-4 pr-12 h-11 border-2 border-primary/20 focus-visible:border-primary rounded-full bg-gray-50/50 dark:bg-zinc-800 dark:border-zinc-700 dark:text-white transition-all duration-300 group-hover:border-primary/40"
+              className="w-full pl-4 pr-12 h-11 border border-white/20 dark:border-zinc-800/50 rounded-full bg-white/40 dark:bg-zinc-800/40 backdrop-blur-md dark:text-white transition-all duration-300 focus:bg-white/60 dark:focus:bg-zinc-800/60 focus:border-primary/50"
               value={searchQuery}
               onChange={(e) => handleSearchChange(e.target.value)}
               onFocus={() => setShowSuggestions(searchQuery.trim().length > 0)}
@@ -191,16 +191,16 @@ export const Navbar = () => {
 
           {/* Dropdown Suggestions */}
           {showSuggestions && suggestions.length > 0 && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-zinc-900 border dark:border-zinc-800 rounded-2xl shadow-2xl overflow-hidden z-50 max-h-[400px] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="absolute top-full left-0 right-0 mt-2 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border border-white/20 dark:border-zinc-800/50 rounded-2xl shadow-2xl overflow-hidden z-50 max-h-[400px] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200">
               {suggestions.map((product) => {
                 const categoryName = categories.find(c => c.id === product.categoryId)?.name || 'Accessories';
                 return (
                   <div
                     key={product.id}
                     onClick={() => handleSuggestionClick(product.name)}
-                    className="flex items-center gap-4 p-3 hover:bg-gray-50 dark:hover:bg-zinc-800/50 cursor-pointer transition-colors border-b last:border-none dark:border-zinc-800"
+                    className="flex items-center gap-4 p-3 hover:bg-white/50 dark:hover:bg-zinc-800/50 cursor-pointer transition-colors border-b last:border-none border-white/10 dark:border-zinc-800/30"
                   >
-                    <div className="h-12 w-12 rounded-lg bg-white border dark:border-zinc-800 p-1 flex items-center justify-center shrink-0 overflow-hidden">
+                    <div className="h-12 w-12 rounded-lg bg-white/80 border border-white/20 dark:border-zinc-800/30 p-1 flex items-center justify-center shrink-0 overflow-hidden">
                       <img 
                         src={product.images?.[0] || product.image} 
                         alt={product.name} 
@@ -244,7 +244,7 @@ export const Navbar = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden h-10 w-10 hover:bg-primary/5 transition-colors"
+            className="md:hidden h-10 w-10 hover:bg-primary/5 transition-colors rounded-full"
             onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
           >
             <Search className="h-5 w-5 text-gray-700 dark:text-gray-200" />
@@ -258,11 +258,11 @@ export const Navbar = () => {
 
       {/* Mobile Search Bar (Expandable) */}
       {isMobileSearchOpen && (
-        <div className="border-t p-3 bg-gray-50 dark:bg-zinc-800 md:hidden animate-in slide-in-from-top duration-200">
+        <div className="border-t p-3 bg-white/50 dark:bg-zinc-800/50 backdrop-blur-md md:hidden animate-in slide-in-from-top duration-200">
           <form onSubmit={handleSearchSubmit} className="relative">
             <Input
               placeholder="Search products..."
-              className="w-full pl-4 pr-12 h-10 border-2 border-primary/20 focus-visible:border-primary rounded-full bg-white dark:bg-zinc-900 dark:border-zinc-700 dark:text-white"
+              className="w-full pl-4 pr-12 h-10 border border-white/20 dark:border-zinc-700/30 rounded-full bg-white/40 dark:bg-zinc-900/40 backdrop-blur-md dark:text-white"
               value={searchQuery}
               onChange={(e) => handleSearchChange(e.target.value)}
               autoFocus
@@ -275,9 +275,9 @@ export const Navbar = () => {
       )}
 
       {/* Desktop Category Bar */}
-      <div className="border-t bg-white dark:bg-zinc-900 hidden lg:block transition-colors duration-300">
+      <div className="border-t bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md hidden lg:block transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 flex items-center gap-8 py-2">
-          <Button variant="ghost" className="font-bold text-primary gap-2 hover:bg-primary/5 transition-colors">
+          <Button variant="ghost" className="font-bold text-primary gap-2 hover:bg-primary/5 transition-colors rounded-xl">
             <Menu className="h-4 w-4" /> Shop By Category
           </Button>
           <nav className="flex items-center gap-6 text-sm font-semibold text-gray-700 dark:text-gray-200">

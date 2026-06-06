@@ -8,7 +8,7 @@ import { HeroSlider } from '../components/HeroSlider';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { Smartphone, Tv, Laptop, Watch, Speaker, Refrigerator, X } from 'lucide-react';
-import { Input } from '../components/ui/input'; // Using Input instead of Search
+import { Input } from '../components/ui/input';
 
 const Index = () => {
   const { products, categories, brands, banners } = useStore();
@@ -40,20 +40,24 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f4f4f4] dark:bg-zinc-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 text-gray-900 dark:text-gray-100 transition-colors duration-300 relative overflow-hidden">
+      {/* Background Decorative Blobs for Liquid Glass Effect */}
+      <div className="absolute top-20 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full filter blur-[120px] opacity-20 dark:opacity-30 pointer-events-none animate-pulse duration-[8000ms]" />
+      <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full filter blur-[120px] opacity-20 dark:opacity-30 pointer-events-none animate-pulse duration-[10000ms]" />
+      
       <Navbar />
       
       {/* Hero Slider - Only show on home page without filters */}
       {!selectedCategory && !searchQuery && <HeroSlider banners={banners} />}
 
       {/* Quick Category Links */}
-      <section className="container py-8">
+      <section className="container py-8 relative z-10">
         <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
           {quickLinks.map((link) => (
             <div 
               key={link.id}
               onClick={() => setSearchParams({ cat: link.id })}
-              className={`group flex flex-col items-center p-4 rounded-2xl bg-white dark:bg-zinc-900 shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 border-2 ${selectedCategory === link.id ? 'border-primary' : 'border-transparent'}`}
+              className={`group flex flex-col items-center p-4 rounded-2xl bg-white/40 dark:bg-zinc-900/40 backdrop-blur-xl border-2 cursor-pointer hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 ${selectedCategory === link.id ? 'border-primary bg-white/60 dark:bg-zinc-900/60' : 'border-white/20 dark:border-zinc-800/30'}`}
             >
               <div className="h-12 w-12 rounded-full bg-primary/5 flex items-center justify-center mb-2 transition-transform duration-300 group-hover:scale-110">
                 <link.icon className="h-6 w-6 text-primary" />
@@ -66,7 +70,7 @@ const Index = () => {
         </div>
       </section>
 
-      <main className="container py-8">
+      <main className="container py-8 relative z-10">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
           <div>
             <h2 className="text-2xl font-black text-gray-800 dark:text-white flex items-center gap-2">
@@ -83,7 +87,7 @@ const Index = () => {
           <div className="flex flex-wrap gap-2">
             <Badge 
               variant={!selectedCategory ? "default" : "outline"}
-              className="cursor-pointer px-4 py-1 hover:scale-105 transition-transform duration-200"
+              className="cursor-pointer px-4 py-1 hover:scale-105 transition-transform duration-200 rounded-full"
               onClick={() => {
                 const params = new URLSearchParams(searchParams);
                 params.delete('cat');
@@ -96,7 +100,7 @@ const Index = () => {
               <Badge 
                 key={cat.id}
                 variant={selectedCategory === cat.id ? "default" : "outline"}
-                className="cursor-pointer px-4 py-1 hover:scale-105 transition-transform duration-200"
+                className="cursor-pointer px-4 py-1 hover:scale-105 transition-transform duration-200 rounded-full"
                 onClick={() => {
                   const params = new URLSearchParams(searchParams);
                   params.set('cat', cat.id);
@@ -121,19 +125,19 @@ const Index = () => {
             ))}
           </div>
         ) : (
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl p-20 text-center shadow-sm">
+          <div className="bg-white/40 dark:bg-zinc-900/40 backdrop-blur-xl border border-white/20 dark:border-zinc-800/30 rounded-3xl p-20 text-center shadow-sm">
             <div className="h-20 w-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
               <Input className="h-10 w-10 text-muted-foreground" placeholder="Search..." />
             </div>
             <p className="text-xl font-bold text-gray-800 dark:text-white">No products found</p>
             <p className="text-muted-foreground mt-2">Try adjusting your search or filters to find what you're looking for.</p>
-            <Button onClick={clearFilters} className="mt-6 bg-primary hover:scale-105 transition-transform duration-200">View All Products</Button>
+            <Button onClick={clearFilters} className="mt-6 bg-primary hover:scale-105 transition-transform duration-200 rounded-xl">View All Products</Button>
           </div>
         )}
       </main>
 
       {/* Features Section */}
-      <section className="bg-white dark:bg-zinc-900 border-t dark:border-zinc-800 mt-12 py-12 transition-colors duration-300">
+      <section className="bg-white/40 dark:bg-zinc-900/40 backdrop-blur-xl border-t border-white/20 dark:border-zinc-800/30 mt-12 py-12 transition-colors duration-300 relative z-10">
         <div className="container grid grid-cols-2 md:grid-cols-4 gap-8">
           {[
             { title: 'Free Delivery', desc: 'On orders above ₹999' },
@@ -149,11 +153,11 @@ const Index = () => {
         </div>
       </section>
 
-      <footer className="bg-primary text-white dark:text-zinc-950 py-12 transition-colors duration-300">
+      <footer className="bg-primary/90 text-white dark:text-zinc-950 py-12 transition-colors duration-300 relative z-10 backdrop-blur-md border-t border-white/10 dark:border-zinc-800/20">
         <div className="container grid md:grid-cols-4 gap-8">
           <div className="space-y-4">
             <div className="flex items-center">
-              <div className="bg-white p-2 rounded-lg">
+              <div className="bg-white p-2 rounded-xl">
                 <img 
                   src="/logo.png" 
                   alt="Satyam Digital" 
@@ -193,8 +197,8 @@ const Index = () => {
             <h4 className="font-bold mb-4 text-white dark:text-zinc-950">Newsletter</h4>
             <p className="text-sm text-white/70 dark:text-zinc-950/80 mb-4">Subscribe to get latest updates and offers.</p>
             <div className="flex gap-2">
-              <input className="bg-white/10 dark:bg-zinc-950/10 border-none rounded-lg px-4 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-secondary dark:focus:ring-zinc-800 text-white dark:text-zinc-950 placeholder:text-white/50 dark:placeholder:text-zinc-950/50" placeholder="Email" />
-              <button className="bg-secondary dark:bg-zinc-900 text-primary dark:text-yellow-400 font-bold px-4 py-2 rounded-lg text-sm hover:scale-105 transition-transform duration-200">Join</button>
+              <input className="bg-white/10 dark:bg-zinc-950/10 border-none rounded-xl px-4 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-secondary dark:focus:ring-zinc-800 text-white dark:text-zinc-950 placeholder:text-white/50 dark:placeholder:text-zinc-950/50" placeholder="Email" />
+              <button className="bg-secondary dark:bg-zinc-900 text-primary dark:text-yellow-400 font-bold px-4 py-2 rounded-xl text-sm hover:scale-105 transition-transform duration-200">Join</button>
             </div>
           </div>
         </div>
