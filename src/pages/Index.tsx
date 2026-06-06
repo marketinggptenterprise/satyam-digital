@@ -224,11 +224,17 @@ const Index = () => {
             </ul>
           </div>
           <div>
-            <h4 className="font-bold mb-4 text-white dark:text-zinc-950">Newsletter</h4>
-            <p className="text-sm text-white/70 dark:text-zinc-950/80 mb-4">Subscribe to get latest updates and offers.</p>
-            <div className="flex gap-2">
-              <input className="bg-white/10 dark:bg-zinc-950/10 border-none rounded-xl px-4 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-secondary dark:focus:ring-zinc-800 text-white dark:text-zinc-950 placeholder:text-white/50 dark:placeholder:text-zinc-950/50" placeholder="Email" />
-              <button className="bg-secondary dark:bg-zinc-900 text-primary dark:text-yellow-400 font-bold px-4 py-2 rounded-xl text-sm hover:scale-105 transition-transform duration-200">Join</button>
+            <h4 className="font-bold mb-4 text-white dark:text-zinc-950">Our Location</h4>
+            <div className="rounded-2xl overflow-hidden border border-white/10 dark:border-zinc-950/20 shadow-md h-48 w-full">
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d273.607536578055!2d87.03014488807364!3d23.228502759623666!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f7af0c720efa6d%3A0xbfe247afaaa9c5b0!2sSATYAM%20DIGITAL!5e1!3m2!1sen!2sin!4v1780749294186!5m2!1sen!2sin" 
+                width="100%" 
+                height="100%" 
+                style={{ border: 0 }} 
+                allowFullScreen 
+                loading="lazy" 
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </div>
           </div>
         </div>
