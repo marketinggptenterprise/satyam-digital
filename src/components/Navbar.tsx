@@ -42,7 +42,7 @@ export const Navbar = () => {
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
-              <MapPin className="h-3 w-3 text-secondary" /> Select Location
+              <MapPin className="h-3 w-3 text-secondary" /> Kargahir, kenduadihi, Bankura - 722101
             </span>
             <span className="hidden sm:inline">Contact: +91 9932026227</span>
           </div>
