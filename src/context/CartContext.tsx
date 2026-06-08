@@ -57,7 +57,13 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const clearCart = () => setCart([]);
 
-  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const subtotal = cart.reduce((sum, item) => {
+    const discountedPrice = item.discountPercent && item.discountPercent > 0
+      ? item.price * (1 - item.discountPercent / 100)
+      : item.price;
+    return sum + (discountedPrice * item.quantity);
+  }, 0);
+
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
