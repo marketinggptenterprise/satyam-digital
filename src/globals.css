@@ -88,21 +88,3 @@
 .glass-card {
   @apply bg-white/30 dark:bg-zinc-900/30 backdrop-blur-lg border border-white/10 dark:border-zinc-800/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.037)];
 }
-
-/* Styles for the initial loader in index.html */
-.initial-loader-wrapper {
-  position: fixed;
-  inset: 0;
-  z-index: 9999; 
-  background-color: white; 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Simple animation for the initial progress bar */
-@keyframes initial-progress {
-  0% { width: 0%; }
-  100% { width: 100%; }
-}
